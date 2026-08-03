@@ -79,7 +79,7 @@
       key: "critical",
       label: "Critical risk",
       heading: "The Act applies to you regardless.",
-      body: "There is no small-business exemption in POPIA, so the useful move is to start rather than to audit. The Information Officer registration and the privacy policy are the two that unlock the rest.",
+      body: "There is no small-business exemption in POPIA, so the useful move is to start rather than to audit. Register your Information Officer and publish a privacy policy first; most of the rest hangs off those two.",
     },
   ];
 

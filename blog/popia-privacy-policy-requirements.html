@@ -18,33 +18,41 @@
     <meta name="twitter:title" content="What your privacy policy must include under POPIA (with template) | POPIAdesk" />
     <meta name="twitter:description" content="The clauses a POPIA privacy policy must contain, mapped from section 18 and the eight conditions, with the most-missed items and a template to start from." />
     <meta name="twitter:image" content="https://popiadesk.co.za/assets/og.png" />
-    <meta name="theme-color" content="#0f172a" />
+    <meta name="theme-color" content="#08080d" />
     <link rel="icon" href="/assets/icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/assets/icon-192.png" />
+    <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/schibsted-grotesk-400-900-normal.woff2" crossorigin />
     <link rel="stylesheet" href="/assets/site.css" />
+    <script>
+      // Marks the root before first paint, so a stylesheet rule can hide a
+      // control that cannot work without JavaScript. Nothing else depends on
+      // it: the page is complete whether or not this runs.
+      document.documentElement.classList.add("js");
+    </script>
   </head>
   <body>
     <a class="skip" href="#content">Skip to content</a>
+    <canvas id="field" aria-hidden="true"></canvas>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="page">
     <header class="masthead">
-      <div class="wrap">
-        <a class="brandmark" href="/">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-            <path d="m9 12 2 2 4-4" />
-          </svg>
-          POPIAdesk
-        </a>
-      </div>
+      <a class="brandmark" href="/"><svg viewBox="0 0 33 18" aria-hidden="true" fill="none"><path d="M0 0h5v18H0zM7 0h5v18H7zM14 0h5v18h-5z" fill="var(--accent-bright)" /><path d="M21 0h5v18h-5zM22.2 1.2h2.6v15.6h-2.6zM28 0h5v18h-5zM29.2 1.2h2.6v15.6h-2.6z" fill="var(--foreground)" fill-rule="evenodd" /></svg> POPIAdesk</a>
+      <a class="btn btn-secondary" href="mailto:hello@popiadesk.co.za?subject=Tell%20me%20when%20POPIAdesk%20opens">Get a note<span class="on-wide"> when it opens</span></a>
     </header>
-    <main id="content">
-      <article class="wrap hero article">
-        <p class="kicker">Guide</p>
-        <h1>What your privacy policy must include under POPIA (with template)</h1>
-        <p class="article-meta">POPIAdesk Team &middot; 21 July 2026 &middot; 7 min read</p>
-        <div class="tags"><span class="tag">Privacy Policy</span><span class="tag">Documentation</span><span class="tag">Compliance</span></div>
-        <div class="prose"><p>A POPIA privacy policy must tell people who you are, what personal information you collect and from where, why you collect it, whether supplying it is voluntary or mandatory and what happens if they refuse, who you share it with, whether it leaves South Africa, how long you keep it, how you secure it, and what rights they have, including how to reach your Information Officer and how to complain to the Information Regulator. That list is not best practice; it comes almost clause for clause from section 18 of the Act. This article maps each required clause to the section it comes from, walks through the eight conditions behind them, and covers the items most policies miss.</p>
+      <main id="content">
+        <article class="wrap hero article">
+          <p class="kicker">Guide</p>
+          <h1>What your privacy policy must include under POPIA (with template)</h1>
+          <p class="article-meta">POPIAdesk Team &middot; 21 July 2026 &middot; 7 min read</p>
+          <ul class="tags"><li class="tag">Privacy Policy</li><li class="tag">Documentation</li><li class="tag">Compliance</li></ul>
+          <p class="notice">
+            Not sure where your business stands?
+            <a href="/assess">Take the free assessment</a>: 25 questions, free,
+            and your answers stay in your browser.
+          </p>
+          <div class="prose"><p>A POPIA privacy policy must tell people who you are, what personal information you collect and from where, why you collect it, whether supplying it is voluntary or mandatory and what happens if they refuse, who you share it with, whether it leaves South Africa, how long you keep it, how you secure it, and what rights they have, including how to reach your Information Officer and how to complain to the Information Regulator. That list is not best practice; it comes almost clause for clause from section 18 of the Act. This article maps each required clause to the section it comes from, walks through the eight conditions behind them, and covers the items most policies miss.</p>
 
-<p>New to the Act? Start with <a href="/blog/does-popia-apply-small-business">who must comply</a> - the short answer is almost every business - and the <a href="/blog/popia-compliance-checklist-small-businesses">seven-step compliance checklist</a>.</p>
+<p>New to the Act? Start with who must comply - the short answer is almost every business - and the seven-step compliance checklist.</p>
 
 <h2>Where the requirement actually comes from</h2>
 <p>POPIA never prescribes a document called a "privacy policy". The duty sits in section 18, under the openness condition: when you collect personal information, you must take reasonably practicable steps to make the data subject aware of a specific list of things. A published privacy policy is the standard, practical way to do that once, in one place, for everyone you collect from. Get section 18 right and the policy largely writes itself.</p>
@@ -84,7 +92,7 @@
 </ol>
 
 <h2>The template route</h2>
-<p>A generic template from an overseas website usually fails the test above: most are written for the GDPR, whose legal bases and disclosures do not line up with section 11 and section 18, and none of them carry the South African specifics. POPIAdesk's <a href="/features">privacy policy generator</a> asks for each section 18 item by name - including the voluntary/mandatory split, the particular laws, and the cross-border safeguard - and produces a policy aligned with the current requirements, versioned so you can regenerate it when your practices change.</p>
+<p>A generic template from an overseas website usually fails the test above: most are written for the GDPR, whose legal bases and disclosures do not line up with section 11 and section 18, and none of them carry the South African specifics. POPIAdesk's privacy policy generator asks for each section 18 item by name - including the voluntary/mandatory split, the particular laws, and the cross-border safeguard - and produces a policy aligned with the current requirements, versioned so you can regenerate it when your practices change.</p>
 
 <h2>Frequently asked questions</h2>
 <h3>Is a privacy policy legally required under POPIA?</h3>
@@ -98,38 +106,62 @@
 <p>The <a href="/assess">free POPIA assessment</a> takes about five minutes and shows where your policy and the rest of your compliance stand.</p>
 
 <p><em>This is general information, not legal advice. For your specific situation, consult an attorney.</em></p></div>
-      </article>
+        </article>
 
-      <section class="wrap">
-        <div class="cta">
+        <section class="wrap rule-top close-scene">
           <h2>POPIAdesk is not open yet</h2>
           <p>
-            The product generates the documents and tracks the deadlines this guide
-            describes. Send us an email and we will reply once, on the day it opens.
+            The product drafts the documents and tracks the deadlines this guide
+            describes. The assessment is open now and takes about ten minutes.
           </p>
-          <div class="btn-row">
-            <a class="btn btn-brand" href="mailto:hello@popiadesk.co.za?subject=Tell%20me%20when%20POPIAdesk%20opens">Email hello@popiadesk.co.za</a>
-            <a class="btn" href="/assess">Take the readiness check</a>
+          <div class="actions">
+            <a class="btn btn-primary" href="/assess">Take the free assessment</a>
+            <a class="btn btn-secondary" href="mailto:hello@popiadesk.co.za?subject=Tell%20me%20when%20POPIAdesk%20opens">Get a note when it opens</a>
           </div>
-        </div>
-      </section>
-    </main>
+        </section>
+      </main>
     <footer>
-      <div class="wrap">
-        <p>POPIAdesk, South Africa. <a href="mailto:hello@popiadesk.co.za">hello@popiadesk.co.za</a></p>
-        <nav aria-label="Site">
-          <a href="/">Home</a>
-          <a href="/assess">Readiness check</a>
-          <a href="/blog">Guides</a>
-          <a href="/privacy">Privacy policy</a>
-          <a href="/terms">Terms</a>
-          <a href="/accessibility">Accessibility</a>
+      <span class="watermark" aria-hidden="true">POPIAdesk</span>
+      <div class="footer-grid">
+        <div class="footer-identity">
+          <a class="brandmark" href="/"><svg viewBox="0 0 33 18" aria-hidden="true" fill="none"><path d="M0 0h5v18H0zM7 0h5v18H7zM14 0h5v18h-5z" fill="var(--accent-bright)" /><path d="M21 0h5v18h-5zM22.2 1.2h2.6v15.6h-2.6zM28 0h5v18h-5zM29.2 1.2h2.6v15.6h-2.6z" fill="var(--foreground)" fill-rule="evenodd" /></svg> POPIAdesk</a>
+          <p class="footer-about">POPIA compliance software for South African businesses.</p>
+          <p class="footer-about">Operated by Lightfast Digital (Pty) Ltd, registration 2026/652553/07.</p>
+          <p class="footer-about">Bellville, Western Cape.</p>
+          <button type="button" class="motion-toggle" data-motion-toggle aria-pressed="false">
+            <span class="dot" aria-hidden="true"></span> Motion off
+          </button>
+        </div>
+        <nav aria-label="On this site">
+          <h2>On this site</h2>
+          <ul>
+            <li><a href="/assess">Readiness assessment</a></li>
+            <li><a href="/blog">Guides</a></li>
+          </ul>
         </nav>
-        <p class="disclaimer">
-          The guides and the readiness check on this site are general information about
-          POPIA, not legal advice.
-        </p>
+        <nav aria-label="Legal">
+          <h2>Legal</h2>
+          <ul>
+            <li><a href="/privacy">Privacy policy</a></li>
+            <li><a href="/terms">Terms</a></li>
+            <li><a href="/accessibility">Accessibility</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Contact">
+          <h2>Contact</h2>
+          <ul>
+            <li><a href="mailto:hello@popiadesk.co.za">hello@popiadesk.co.za</a></li>
+          </ul>
+        </nav>
       </div>
+      <p class="footer-note">
+        POPIAdesk is software, not a law firm, and nothing it produces is legal
+        advice. A score is not a defence. While the product is closed this site
+        is a set of static files served by GitHub Pages; our privacy policy
+        describes the product itself.
+      </p>
     </footer>
+    </div>
+    <script type="module" src="/assets/site.js"></script>
   </body>
 </html>

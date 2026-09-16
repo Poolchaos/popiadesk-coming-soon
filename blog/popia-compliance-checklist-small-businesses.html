@@ -18,33 +18,41 @@
     <meta name="twitter:title" content="POPIA compliance checklist for small businesses (2026) | POPIAdesk" />
     <meta name="twitter:description" content="The seven steps to POPIA compliance for South African small businesses: Information Officer, privacy policy, PAIA manual, consent, DSRs and breach plan." />
     <meta name="twitter:image" content="https://popiadesk.co.za/assets/og.png" />
-    <meta name="theme-color" content="#0f172a" />
+    <meta name="theme-color" content="#08080d" />
     <link rel="icon" href="/assets/icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/assets/icon-192.png" />
+    <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/schibsted-grotesk-400-900-normal.woff2" crossorigin />
     <link rel="stylesheet" href="/assets/site.css" />
+    <script>
+      // Marks the root before first paint, so a stylesheet rule can hide a
+      // control that cannot work without JavaScript. Nothing else depends on
+      // it: the page is complete whether or not this runs.
+      document.documentElement.classList.add("js");
+    </script>
   </head>
   <body>
     <a class="skip" href="#content">Skip to content</a>
+    <canvas id="field" aria-hidden="true"></canvas>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="page">
     <header class="masthead">
-      <div class="wrap">
-        <a class="brandmark" href="/">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-            <path d="m9 12 2 2 4-4" />
-          </svg>
-          POPIAdesk
-        </a>
-      </div>
+      <a class="brandmark" href="/"><svg viewBox="0 0 33 18" aria-hidden="true" fill="none"><path d="M0 0h5v18H0zM7 0h5v18H7zM14 0h5v18h-5z" fill="var(--accent-bright)" /><path d="M21 0h5v18h-5zM22.2 1.2h2.6v15.6h-2.6zM28 0h5v18h-5zM29.2 1.2h2.6v15.6h-2.6z" fill="var(--foreground)" fill-rule="evenodd" /></svg> POPIAdesk</a>
+      <a class="btn btn-secondary" href="mailto:hello@popiadesk.co.za?subject=Tell%20me%20when%20POPIAdesk%20opens">Get a note<span class="on-wide"> when it opens</span></a>
     </header>
-    <main id="content">
-      <article class="wrap hero article">
-        <p class="kicker">Guide</p>
-        <h1>POPIA compliance checklist for small businesses (2026)</h1>
-        <p class="article-meta">POPIAdesk Team &middot; 14 July 2026 &middot; 7 min read</p>
-        <div class="tags"><span class="tag">POPIA</span><span class="tag">Checklist</span><span class="tag">Small Business</span></div>
-        <div class="prose"><p>POPIA compliance for a small business comes down to seven concrete steps: appoint and register your Information Officer, publish a privacy policy, compile a PAIA manual, put consent records in place, set up a process for data subject requests, prepare a breach response plan, and sign written agreements with the operators who process data for you. None of it needs a law degree. This checklist walks through each step - what the law actually asks of you, and how to get it done - roughly in the order we recommend tackling them.</p>
+      <main id="content">
+        <article class="wrap hero article">
+          <p class="kicker">Guide</p>
+          <h1>POPIA compliance checklist for small businesses (2026)</h1>
+          <p class="article-meta">POPIAdesk Team &middot; 14 July 2026 &middot; 7 min read</p>
+          <ul class="tags"><li class="tag">POPIA</li><li class="tag">Checklist</li><li class="tag">Small Business</li></ul>
+          <p class="notice">
+            Not sure where your business stands?
+            <a href="/assess">Take the free assessment</a>: 25 questions, free,
+            and your answers stay in your browser.
+          </p>
+          <div class="prose"><p>POPIA compliance for a small business comes down to seven concrete steps: appoint and register your Information Officer, publish a privacy policy, compile a PAIA manual, put consent records in place, set up a process for data subject requests, prepare a breach response plan, and sign written agreements with the operators who process data for you. None of it needs a law degree. This checklist walks through each step - what the law actually asks of you, and how to get it done - roughly in the order we recommend tackling them.</p>
 
-<p>New to the Act itself? Start with our <a href="/blog/what-is-popia-guide-south-african-businesses">complete guide to POPIA</a>, then come back here for the to-do list.</p>
+<p>New to the Act itself? Start with our complete guide to POPIA, then come back here for the to-do list.</p>
 
 <h2>1. Appoint and register your Information Officer</h2>
 <p>Under section 55 of POPIA, every business has an Information Officer whether it appoints one or not: by default it is the head of the business - the owner, CEO, or senior partner. You cannot opt out of the role, but you can delegate the day-to-day work to a deputy. The accountability stays with the head.</p>
@@ -53,7 +61,7 @@
 <li>The Information Officer must be registered with the Information Regulator before performing their duties. Registration is done on the Regulator's eServices portal and is free.</li>
 <li>The appointment should be recorded in writing, so the role, its duties, and any delegation are documented.</li>
 </ul>
-<p>Read the full walkthrough in our <a href="/blog/information-officer-appointment-section-55">guide to appointing an Information Officer under section 55</a>. POPIAdesk generates the Information Officer Appointment letter for you.</p>
+<p>Read the full walkthrough in our guide to appointing an Information Officer under section 55. POPIAdesk generates the Information Officer Appointment letter for you.</p>
 
 <h2>2. Publish a privacy policy</h2>
 <p>POPIA's openness condition requires you to tell people what you do with their information. In practice that means a privacy policy that states: what personal information you collect, why you collect it, who you share it with, whether it leaves South Africa, how long you keep it, how you secure it, how a person can access or correct what you hold, and your Information Officer's contact details.</p>
@@ -95,38 +103,62 @@
 <p>Work the list top to bottom - the Information Officer registration and the privacy policy are the highest-visibility items, and the PAIA manual is the one most often missing entirely. If you want to know exactly where you stand first, take the <a href="/assess">free POPIA assessment</a> and check your compliance score free - it takes about five minutes and covers each area in this checklist.</p>
 
 <p><em>This is general information, not legal advice. For your specific situation, consult an attorney.</em></p></div>
-      </article>
+        </article>
 
-      <section class="wrap">
-        <div class="cta">
+        <section class="wrap rule-top close-scene">
           <h2>POPIAdesk is not open yet</h2>
           <p>
-            The product generates the documents and tracks the deadlines this guide
-            describes. Send us an email and we will reply once, on the day it opens.
+            The product drafts the documents and tracks the deadlines this guide
+            describes. The assessment is open now and takes about ten minutes.
           </p>
-          <div class="btn-row">
-            <a class="btn btn-brand" href="mailto:hello@popiadesk.co.za?subject=Tell%20me%20when%20POPIAdesk%20opens">Email hello@popiadesk.co.za</a>
-            <a class="btn" href="/assess">Take the readiness check</a>
+          <div class="actions">
+            <a class="btn btn-primary" href="/assess">Take the free assessment</a>
+            <a class="btn btn-secondary" href="mailto:hello@popiadesk.co.za?subject=Tell%20me%20when%20POPIAdesk%20opens">Get a note when it opens</a>
           </div>
-        </div>
-      </section>
-    </main>
+        </section>
+      </main>
     <footer>
-      <div class="wrap">
-        <p>POPIAdesk, South Africa. <a href="mailto:hello@popiadesk.co.za">hello@popiadesk.co.za</a></p>
-        <nav aria-label="Site">
-          <a href="/">Home</a>
-          <a href="/assess">Readiness check</a>
-          <a href="/blog">Guides</a>
-          <a href="/privacy">Privacy policy</a>
-          <a href="/terms">Terms</a>
-          <a href="/accessibility">Accessibility</a>
+      <span class="watermark" aria-hidden="true">POPIAdesk</span>
+      <div class="footer-grid">
+        <div class="footer-identity">
+          <a class="brandmark" href="/"><svg viewBox="0 0 33 18" aria-hidden="true" fill="none"><path d="M0 0h5v18H0zM7 0h5v18H7zM14 0h5v18h-5z" fill="var(--accent-bright)" /><path d="M21 0h5v18h-5zM22.2 1.2h2.6v15.6h-2.6zM28 0h5v18h-5zM29.2 1.2h2.6v15.6h-2.6z" fill="var(--foreground)" fill-rule="evenodd" /></svg> POPIAdesk</a>
+          <p class="footer-about">POPIA compliance software for South African businesses.</p>
+          <p class="footer-about">Operated by Lightfast Digital (Pty) Ltd, registration 2026/652553/07.</p>
+          <p class="footer-about">Bellville, Western Cape.</p>
+          <button type="button" class="motion-toggle" data-motion-toggle aria-pressed="false">
+            <span class="dot" aria-hidden="true"></span> Motion off
+          </button>
+        </div>
+        <nav aria-label="On this site">
+          <h2>On this site</h2>
+          <ul>
+            <li><a href="/assess">Readiness assessment</a></li>
+            <li><a href="/blog">Guides</a></li>
+          </ul>
         </nav>
-        <p class="disclaimer">
-          The guides and the readiness check on this site are general information about
-          POPIA, not legal advice.
-        </p>
+        <nav aria-label="Legal">
+          <h2>Legal</h2>
+          <ul>
+            <li><a href="/privacy">Privacy policy</a></li>
+            <li><a href="/terms">Terms</a></li>
+            <li><a href="/accessibility">Accessibility</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Contact">
+          <h2>Contact</h2>
+          <ul>
+            <li><a href="mailto:hello@popiadesk.co.za">hello@popiadesk.co.za</a></li>
+          </ul>
+        </nav>
       </div>
+      <p class="footer-note">
+        POPIAdesk is software, not a law firm, and nothing it produces is legal
+        advice. A score is not a defence. While the product is closed this site
+        is a set of static files served by GitHub Pages; our privacy policy
+        describes the product itself.
+      </p>
     </footer>
+    </div>
+    <script type="module" src="/assets/site.js"></script>
   </body>
 </html>

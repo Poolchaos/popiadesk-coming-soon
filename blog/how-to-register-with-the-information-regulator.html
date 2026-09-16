@@ -18,33 +18,41 @@
     <meta name="twitter:title" content="How to register with the Information Regulator (step by step) | POPIAdesk" />
     <meta name="twitter:description" content="How to register your Information Officer on the Information Regulator's eServices portal: the details you need, the steps, and why it comes first." />
     <meta name="twitter:image" content="https://popiadesk.co.za/assets/og.png" />
-    <meta name="theme-color" content="#0f172a" />
+    <meta name="theme-color" content="#08080d" />
     <link rel="icon" href="/assets/icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/assets/icon-192.png" />
+    <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/schibsted-grotesk-400-900-normal.woff2" crossorigin />
     <link rel="stylesheet" href="/assets/site.css" />
+    <script>
+      // Marks the root before first paint, so a stylesheet rule can hide a
+      // control that cannot work without JavaScript. Nothing else depends on
+      // it: the page is complete whether or not this runs.
+      document.documentElement.classList.add("js");
+    </script>
   </head>
   <body>
     <a class="skip" href="#content">Skip to content</a>
+    <canvas id="field" aria-hidden="true"></canvas>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="page">
     <header class="masthead">
-      <div class="wrap">
-        <a class="brandmark" href="/">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-            <path d="m9 12 2 2 4-4" />
-          </svg>
-          POPIAdesk
-        </a>
-      </div>
+      <a class="brandmark" href="/"><svg viewBox="0 0 33 18" aria-hidden="true" fill="none"><path d="M0 0h5v18H0zM7 0h5v18H7zM14 0h5v18h-5z" fill="var(--accent-bright)" /><path d="M21 0h5v18h-5zM22.2 1.2h2.6v15.6h-2.6zM28 0h5v18h-5zM29.2 1.2h2.6v15.6h-2.6z" fill="var(--foreground)" fill-rule="evenodd" /></svg> POPIAdesk</a>
+      <a class="btn btn-secondary" href="mailto:hello@popiadesk.co.za?subject=Tell%20me%20when%20POPIAdesk%20opens">Get a note<span class="on-wide"> when it opens</span></a>
     </header>
-    <main id="content">
-      <article class="wrap hero article">
-        <p class="kicker">Guide</p>
-        <h1>How to register with the Information Regulator (step by step)</h1>
-        <p class="article-meta">POPIAdesk Team &middot; 3 August 2026 &middot; 6 min read</p>
-        <div class="tags"><span class="tag">Information Officer</span><span class="tag">Registration</span><span class="tag">How To</span></div>
-        <div class="prose"><p>Registering with the Information Regulator happens on its eServices portal at <a href="https://eservices.inforegulator.org.za">eservices.inforegulator.org.za</a>, it is free, and it is not optional: section 55(2) of POPIA requires your Information Officer to be registered before taking up the duties of the office. The process itself has four steps - create a portal account, activate it and log in, register your organisation, and add any deputies before you submit - and it goes fastest when you gather the details the form asks for before you start. This walkthrough covers each step, what to have at hand, and the questions owners ask most.</p>
+      <main id="content">
+        <article class="wrap hero article">
+          <p class="kicker">Guide</p>
+          <h1>How to register with the Information Regulator (step by step)</h1>
+          <p class="article-meta">POPIAdesk Team &middot; 3 August 2026 &middot; 6 min read</p>
+          <ul class="tags"><li class="tag">Information Officer</li><li class="tag">Registration</li><li class="tag">How To</li></ul>
+          <p class="notice">
+            Not sure where your business stands?
+            <a href="/assess">Take the free assessment</a>: 25 questions, free,
+            and your answers stay in your browser.
+          </p>
+          <div class="prose"><p>Registering with the Information Regulator happens on its eServices portal at <a href="https://eservices.inforegulator.org.za">eservices.inforegulator.org.za</a>, it is free, and it is not optional: section 55(2) of POPIA requires your Information Officer to be registered before taking up the duties of the office. The process itself has four steps - create a portal account, activate it and log in, register your organisation, and add any deputies before you submit - and it goes fastest when you gather the details the form asks for before you start. This walkthrough covers each step, what to have at hand, and the questions owners ask most.</p>
 
-<p>This article assumes the appointment side is settled: who your Information Officer is, and whether a deputy will carry the day-to-day work. If it is not, start with our walkthrough on <a href="/blog/how-to-appoint-information-officer-popia">how to appoint an Information Officer</a>, then come back here for the registration.</p>
+<p>This article assumes the appointment side is settled: who your Information Officer is, and whether a deputy will carry the day-to-day work. If it is not, start with our walkthrough on how to appoint an Information Officer, then come back here for the registration.</p>
 
 <h2>Registration comes before the rest of the job</h2>
 <p>The sequencing matters more than most owners realise. Section 55(2) does not say the Information Officer should register at some point; it says the officer takes up their duties only after registration with the Regulator, and section 56 applies the same rule to deputies. Every other part of the role - answering data subject requests, maintaining the PAIA manual, dealing with the Regulator during an investigation - formally sits behind this one administrative step.</p>
@@ -81,41 +89,65 @@
 <p>Your registration must be migrated to the eServices portal, since the old registration portal was retired when eServices launched. Create the account as in step 1, choose the migration option, and have your previous registration certificate number ready so the portal can find and carry across your existing record.</p>
 
 <h2>Where this fits in the bigger picture</h2>
-<p>Registration is the visible half of step one of our <a href="/blog/popia-compliance-checklist-small-businesses">POPIA compliance checklist for small businesses</a>; the privacy policy, PAIA manual, and request process all build on it. To see how the rest of your compliance measures up, take the <a href="/assess">free POPIA assessment</a> - it takes about five minutes and shows you exactly which pieces are in place.</p>
+<p>Registration is the visible half of step one of our POPIA compliance checklist for small businesses; the privacy policy, PAIA manual, and request process all build on it. To see how the rest of your compliance measures up, take the <a href="/assess">free POPIA assessment</a> - it takes about five minutes and shows you exactly which pieces are in place.</p>
 
 <p><em>This is general information, not legal advice. For your specific situation, consult an attorney.</em></p></div>
-      </article>
+        </article>
 
-      <section class="wrap">
-        <div class="cta">
+        <section class="wrap rule-top close-scene">
           <h2>POPIAdesk is not open yet</h2>
           <p>
-            The product generates the documents and tracks the deadlines this guide
-            describes. Send us an email and we will reply once, on the day it opens.
+            The product drafts the documents and tracks the deadlines this guide
+            describes. The assessment is open now and takes about ten minutes.
           </p>
-          <div class="btn-row">
-            <a class="btn btn-brand" href="mailto:hello@popiadesk.co.za?subject=Tell%20me%20when%20POPIAdesk%20opens">Email hello@popiadesk.co.za</a>
-            <a class="btn" href="/assess">Take the readiness check</a>
+          <div class="actions">
+            <a class="btn btn-primary" href="/assess">Take the free assessment</a>
+            <a class="btn btn-secondary" href="mailto:hello@popiadesk.co.za?subject=Tell%20me%20when%20POPIAdesk%20opens">Get a note when it opens</a>
           </div>
-        </div>
-      </section>
-    </main>
+        </section>
+      </main>
     <footer>
-      <div class="wrap">
-        <p>POPIAdesk, South Africa. <a href="mailto:hello@popiadesk.co.za">hello@popiadesk.co.za</a></p>
-        <nav aria-label="Site">
-          <a href="/">Home</a>
-          <a href="/assess">Readiness check</a>
-          <a href="/blog">Guides</a>
-          <a href="/privacy">Privacy policy</a>
-          <a href="/terms">Terms</a>
-          <a href="/accessibility">Accessibility</a>
+      <span class="watermark" aria-hidden="true">POPIAdesk</span>
+      <div class="footer-grid">
+        <div class="footer-identity">
+          <a class="brandmark" href="/"><svg viewBox="0 0 33 18" aria-hidden="true" fill="none"><path d="M0 0h5v18H0zM7 0h5v18H7zM14 0h5v18h-5z" fill="var(--accent-bright)" /><path d="M21 0h5v18h-5zM22.2 1.2h2.6v15.6h-2.6zM28 0h5v18h-5zM29.2 1.2h2.6v15.6h-2.6z" fill="var(--foreground)" fill-rule="evenodd" /></svg> POPIAdesk</a>
+          <p class="footer-about">POPIA compliance software for South African businesses.</p>
+          <p class="footer-about">Operated by Lightfast Digital (Pty) Ltd, registration 2026/652553/07.</p>
+          <p class="footer-about">Bellville, Western Cape.</p>
+          <button type="button" class="motion-toggle" data-motion-toggle aria-pressed="false">
+            <span class="dot" aria-hidden="true"></span> Motion off
+          </button>
+        </div>
+        <nav aria-label="On this site">
+          <h2>On this site</h2>
+          <ul>
+            <li><a href="/assess">Readiness assessment</a></li>
+            <li><a href="/blog">Guides</a></li>
+          </ul>
         </nav>
-        <p class="disclaimer">
-          The guides and the readiness check on this site are general information about
-          POPIA, not legal advice.
-        </p>
+        <nav aria-label="Legal">
+          <h2>Legal</h2>
+          <ul>
+            <li><a href="/privacy">Privacy policy</a></li>
+            <li><a href="/terms">Terms</a></li>
+            <li><a href="/accessibility">Accessibility</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Contact">
+          <h2>Contact</h2>
+          <ul>
+            <li><a href="mailto:hello@popiadesk.co.za">hello@popiadesk.co.za</a></li>
+          </ul>
+        </nav>
       </div>
+      <p class="footer-note">
+        POPIAdesk is software, not a law firm, and nothing it produces is legal
+        advice. A score is not a defence. While the product is closed this site
+        is a set of static files served by GitHub Pages; our privacy policy
+        describes the product itself.
+      </p>
     </footer>
+    </div>
+    <script type="module" src="/assets/site.js"></script>
   </body>
 </html>

@@ -4,59 +4,88 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Accessibility | POPIAdesk</title>
-    <meta name="description" content="Accessibility for POPIAdesk." />
+    <meta name="description" content="Accessibility for POPIAdesk, operated by Lightfast Digital (Pty) Ltd." />
     <link rel="canonical" href="https://popiadesk.co.za/accessibility" />
     <meta name="robots" content="index,follow" />
-    <meta property="og:type" content="article" />
+    <meta property="og:type" content="website" />
     <meta property="og:site_name" content="POPIAdesk" />
     <meta property="og:locale" content="en_ZA" />
     <meta property="og:title" content="Accessibility | POPIAdesk" />
-    <meta property="og:description" content="Accessibility for POPIAdesk." />
+    <meta property="og:description" content="Accessibility for POPIAdesk, operated by Lightfast Digital (Pty) Ltd." />
     <meta property="og:url" content="https://popiadesk.co.za/accessibility" />
     <meta property="og:image" content="https://popiadesk.co.za/assets/og.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Accessibility | POPIAdesk" />
-    <meta name="twitter:description" content="Accessibility for POPIAdesk." />
+    <meta name="twitter:description" content="Accessibility for POPIAdesk, operated by Lightfast Digital (Pty) Ltd." />
     <meta name="twitter:image" content="https://popiadesk.co.za/assets/og.png" />
-    <meta name="theme-color" content="#0f172a" />
+    <meta name="theme-color" content="#08080d" />
     <link rel="icon" href="/assets/icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/assets/icon-192.png" />
+    <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/schibsted-grotesk-400-900-normal.woff2" crossorigin />
     <link rel="stylesheet" href="/assets/site.css" />
+    <script>
+      // Marks the root before first paint, so a stylesheet rule can hide a
+      // control that cannot work without JavaScript. Nothing else depends on
+      // it: the page is complete whether or not this runs.
+      document.documentElement.classList.add("js");
+    </script>
   </head>
   <body>
     <a class="skip" href="#content">Skip to content</a>
+    <canvas id="field" aria-hidden="true"></canvas>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="page">
     <header class="masthead">
-      <div class="wrap">
-        <a class="brandmark" href="/">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-            <path d="m9 12 2 2 4-4" />
-          </svg>
-          POPIAdesk
-        </a>
-      </div>
+      <a class="brandmark" href="/"><svg viewBox="0 0 33 18" aria-hidden="true" fill="none"><path d="M0 0h5v18H0zM7 0h5v18H7zM14 0h5v18h-5z" fill="var(--accent-bright)" /><path d="M21 0h5v18h-5zM22.2 1.2h2.6v15.6h-2.6zM28 0h5v18h-5zM29.2 1.2h2.6v15.6h-2.6z" fill="var(--foreground)" fill-rule="evenodd" /></svg> POPIAdesk</a>
+      <a class="btn btn-secondary" href="mailto:hello@popiadesk.co.za?subject=Tell%20me%20when%20POPIAdesk%20opens">Get a note<span class="on-wide"> when it opens</span></a>
     </header>
-    <main id="content">
-      <div class="wrap hero article">
-        <div class="prose"><div><h1>Accessibility</h1><p>Last reviewed: 29 July 2026</p><div><section><p>POPIAdesk should be usable by everyone, including people who rely on a keyboard, a screen reader, or reduced motion. This page says where that stands today, plainly.</p></section><section><h2>Our target</h2><p>We build against WCAG 2.1 level AA and test against it automatically on every page, on every change. We do not claim full conformance: no independent audit has been done, and our own screen-reader testing is still in progress. When that changes, this page will say so.</p></section><section><h2>What works today</h2><ul><li>Every page can be navigated by keyboard, with a visible focus indicator and a skip-to-content link as the first stop.</li><li>Colours meet AA contrast in both the light and dark themes, checked per pairing rather than assumed.</li><li>Animations respect your reduced-motion setting.</li><li>Form fields have proper labels, and validation errors are linked to the field they belong to and announced, not shown silently.</li><li>Pages reflow to a single column without horizontal scrolling down to 320 pixels wide, so browser zoom works.</li><li>Assessment answers behave as a real radio group: one tab stop per question, with arrow keys moving between options.</li><li>Long-running actions, like a website scan, announce that they have started and what the result was.</li></ul></section><section><h2>What we know is missing</h2><ul><li>Our screen-reader testing is not finished. Automated checks confirm the labels and roles are present; they cannot judge whether every announcement is clearly worded.</li><li>Generated PDF documents are not tagged for screen readers. If you need a document in an accessible format, ask us and we will provide one.</li><li>No independent accessibility audit has been carried out.</li></ul></section><section><h2>Tell us what is broken</h2><p>If any part of POPIAdesk does not work with your assistive technology, email <a href="mailto:hello@popiadesk.co.za">hello@popiadesk.co.za</a> with the page and what happened. We respond within 5 business days, and fixing it becomes our work, not yours.</p><p>If you need something from POPIAdesk in a different format to use it, ask in the same email and we will arrange it.</p></section><section><h2>Related</h2><p>See our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms of Service</a>.</p></section></div></div><!--$--><!--/$--></div>
-      </div>
-    </main>
+      <main id="content">
+        <div class="wrap hero article">
+          <div class="prose"><div><h1>Accessibility</h1><p>Last reviewed: 29 July 2026</p><p><a href="mailto:hello@popiadesk.co.za">Tell us what did not work: hello@popiadesk.co.za</a></p><div><section><p>POPIAdesk should be usable by everyone, including people who rely on a keyboard, a screen reader, or reduced motion. This page says where that stands today, plainly.</p></section><section><h2>Our target</h2><p>We build against WCAG 2.1 level AA and test against it automatically on every page, on every change. We do not claim full conformance: no independent audit has been done, and our own screen-reader testing is still in progress. When that changes, this page will say so.</p></section><section><h2>What works today</h2><ul><li>Every page can be navigated by keyboard, with a visible focus indicator and a skip-to-content link as the first stop.</li><li>Colours meet AA contrast in both the light and dark themes, checked per pairing rather than assumed.</li><li>Animations respect your reduced-motion setting.</li><li>Form fields have proper labels, and validation errors are linked to the field they belong to and announced, not shown silently.</li><li>Pages reflow to a single column without horizontal scrolling down to 320 pixels wide, so browser zoom works.</li><li>Assessment answers behave as a real radio group: one tab stop per question, with arrow keys moving between options.</li><li>Long-running actions, like a website scan, announce that they have started and what the result was.</li></ul></section><section><h2>What we know is missing</h2><ul><li>Our screen-reader testing is not finished. Automated checks confirm the labels and roles are present; they cannot judge whether every announcement is clearly worded.</li><li>Generated PDF documents are not tagged for screen readers. If you need a document in an accessible format, ask us and we will provide one.</li><li>No independent accessibility audit has been carried out.</li></ul></section><section><h2>Tell us what is broken</h2><p>If any part of POPIAdesk does not work with your assistive technology, email <a href="mailto:hello@popiadesk.co.za">hello@popiadesk.co.za</a> with the page and what happened. We respond within 5 business days, and fixing it becomes our work, not yours.</p><p>If you need something from POPIAdesk in a different format to use it, ask in the same email and we will arrange it.</p></section><section><h2>Related</h2><p>See our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms of Service</a>.</p></section></div></div><!--$--><!--/$--></div>
+        </div>
+      </main>
     <footer>
-      <div class="wrap">
-        <p>POPIAdesk, South Africa. <a href="mailto:hello@popiadesk.co.za">hello@popiadesk.co.za</a></p>
-        <nav aria-label="Site">
-          <a href="/">Home</a>
-          <a href="/assess">Readiness check</a>
-          <a href="/blog">Guides</a>
-          <a href="/privacy">Privacy policy</a>
-          <a href="/terms">Terms</a>
-          <a href="/accessibility">Accessibility</a>
+      <span class="watermark" aria-hidden="true">POPIAdesk</span>
+      <div class="footer-grid">
+        <div class="footer-identity">
+          <a class="brandmark" href="/"><svg viewBox="0 0 33 18" aria-hidden="true" fill="none"><path d="M0 0h5v18H0zM7 0h5v18H7zM14 0h5v18h-5z" fill="var(--accent-bright)" /><path d="M21 0h5v18h-5zM22.2 1.2h2.6v15.6h-2.6zM28 0h5v18h-5zM29.2 1.2h2.6v15.6h-2.6z" fill="var(--foreground)" fill-rule="evenodd" /></svg> POPIAdesk</a>
+          <p class="footer-about">POPIA compliance software for South African businesses.</p>
+          <p class="footer-about">Operated by Lightfast Digital (Pty) Ltd, registration 2026/652553/07.</p>
+          <p class="footer-about">Bellville, Western Cape.</p>
+          <button type="button" class="motion-toggle" data-motion-toggle aria-pressed="false">
+            <span class="dot" aria-hidden="true"></span> Motion off
+          </button>
+        </div>
+        <nav aria-label="On this site">
+          <h2>On this site</h2>
+          <ul>
+            <li><a href="/assess">Readiness assessment</a></li>
+            <li><a href="/blog">Guides</a></li>
+          </ul>
         </nav>
-        <p class="disclaimer">
-          The guides and the readiness check on this site are general information about
-          POPIA, not legal advice.
-        </p>
+        <nav aria-label="Legal">
+          <h2>Legal</h2>
+          <ul>
+            <li><a href="/privacy">Privacy policy</a></li>
+            <li><a href="/terms">Terms</a></li>
+            <li><a href="/accessibility">Accessibility</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Contact">
+          <h2>Contact</h2>
+          <ul>
+            <li><a href="mailto:hello@popiadesk.co.za">hello@popiadesk.co.za</a></li>
+          </ul>
+        </nav>
       </div>
+      <p class="footer-note">
+        POPIAdesk is software, not a law firm, and nothing it produces is legal
+        advice. A score is not a defence. While the product is closed this site
+        is a set of static files served by GitHub Pages; our privacy policy
+        describes the product itself.
+      </p>
     </footer>
+    </div>
+    <script type="module" src="/assets/site.js"></script>
   </body>
 </html>

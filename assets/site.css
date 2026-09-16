@@ -1,45 +1,152 @@
-/* POPIAdesk interim site. Dark-only by decision: the brand statement is
-   emerald on ink, and a launch holding page has no reason to carry two
-   themes. Tokens below are copied from src/app/globals.css (dark block) so
-   the interim site and the app cannot drift apart. */
+/* POPIAdesk interim site, on the Shield and Stream surface.
+ *
+ * The token values below are copied verbatim from the `[data-surface="stream"]`
+ * block in src/app/globals.css, which is where they are defined and where their
+ * contrast ratios are measured (scripts/contrast-audit.mjs). A tripwire unit
+ * test compares the two, so this copy cannot drift silently.
+ *
+ * Every `color-mix()` in the app's stylesheet is written out here as a plain
+ * rgba(). The function is Safari 16.2 and later; the interim site is the only
+ * thing the company has running and it should not lose a hairline on an iPhone
+ * a year old. The values are the same colours, resolved by hand.
+ *
+ * This surface is a single dark theme by decision (DESIGN-BRIEF section 5,
+ * 2026-09-07): the obsidian ground and the cyan accent are a fixed brand axis,
+ * not a default.
+ */
+
+/* --- Faces -------------------------------------------------------------- */
+
+/* Latin subsets, self-hosted. The site makes zero external requests, which is
+   a gate in tools/verify.mjs, so Google's CSS API is used at authoring time
+   (tools/fonts.mjs) and never by a visitor's browser. Both faces are SIL Open
+   Font License 1.1. */
 
 @font-face {
-  font-family: "Newsreader";
+  font-family: "Schibsted Grotesk";
   font-style: normal;
-  font-weight: 600;
+  font-weight: 400 900;
   font-display: swap;
-  src: url("fonts/newsreader-600.woff2") format("woff2");
+  src: url("fonts/schibsted-grotesk-400-900-normal.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+    U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
-  font-family: "Newsreader";
-  font-style: italic;
-  font-weight: 400;
+  font-family: "Playfair Display";
+  font-style: normal;
+  font-weight: 500;
   font-display: swap;
-  src: url("fonts/newsreader-400-italic.woff2") format("woff2");
+  src: url("fonts/playfair-display-500-normal.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+    U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+
+@font-face {
+  font-family: "Playfair Display";
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/playfair-display-500-italic.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+    U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Metric-matched fallbacks, so the headline does not reflow when the webfont
+   lands. The overrides are computed the way next/font computes them, from the
+   same capsize metrics table the app builds against (checked 2026-09-16):
+   size-adjust is the ratio of average character widths normalised by units per
+   em, and the ascent and descent are scaled by it. Without these the retired
+   build's CLS went from 0.0285 to 0.0998 against a 0.1 budget. */
+
+@font-face {
+  font-family: "Schibsted Fallback";
+  src: local("Arial");
+  size-adjust: 104.49%;
+  ascent-override: 93.46%;
+  descent-override: 24.67%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Playfair Fallback";
+  src: local("Times New Roman");
+  size-adjust: 111.26%;
+  ascent-override: 97.25%;
+  descent-override: 22.56%;
+  line-gap-override: 0%;
+}
+
+/* --- Tokens ------------------------------------------------------------- */
 
 :root {
-  --background: #0f172a;
-  --foreground: #f8fafc;
-  --body: #cbd5e1;
-  --muted: #94a3b8;
-  --border: #334155;
-  --brand: #10b981;
-  --brand-foreground: #052e16;
-  --brand-text: #34d399;
-  --brand-soft: #04231a;
-  --brand-soft-foreground: #6ee7b7;
-  --success: #4ade80;
+  color-scheme: dark;
+
+  --background: #08080d;
+  --foreground: #edeff6;
+  --card: #0a1124;
+  --muted: #121a2e;
+  --muted-foreground: #98a0b5;
+  --border: #6e768a;
+  --ring: #06b6d4;
+
+  --brand: #2563eb;
+  --brand-foreground: #ffffff;
+  --brand-text: #9db9ff;
+  --brand-soft: #0d1731;
+  --primary-dark: #1d4ed8;
+  --accent-bright: #06b6d4;
+
+  --glass: rgba(255, 255, 255, 0.06);
+  --glass-strong: rgba(255, 255, 255, 0.09);
+  --glass-border: rgba(255, 255, 255, 0.12);
+
+  --success: #10b981;
+  --success-soft-foreground: #6ee7b7;
   --warning: #fbbf24;
+  --warning-soft-foreground: #fcd34d;
   --destructive: #f87171;
-  --card: rgba(148, 163, 184, 0.05);
-  --card-border: rgba(52, 211, 153, 0.16);
+  --destructive-soft-foreground: #fca5a5;
+  --info: #38bdf8;
+
+  /* Resolved from color-mix() in globals.css, same colours. */
+  --brand-glow: rgba(37, 99, 235, 0.35);
+  --panel-shadow: rgba(0, 0, 0, 0.6);
+  --wire: rgba(237, 239, 246, 0.2);
+  --watermark-ink: rgba(237, 239, 246, 0.08);
+  --watermark-hover: rgba(6, 182, 212, 0.18);
+
+  --radius: 1.25rem;
+  --radius-sm: 0.75rem;
+  --ease-stream: cubic-bezier(0.19, 1, 0.22, 1);
+  --motion-fast: 200ms;
+  --motion-base: 300ms;
+  --motion-slow: 900ms;
+
   --sans:
-    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    "Schibsted Grotesk", "Schibsted Fallback", "Helvetica Neue", "Segoe UI", system-ui,
     sans-serif;
-  --serif: "Newsreader", ui-serif, Georgia, "Times New Roman", serif;
+  --display: "Playfair Display", "Playfair Fallback", Georgia, "Times New Roman", serif;
+
+  --gutter: 0.875rem;
 }
+
+@media (min-width: 40rem) {
+  :root {
+    --gutter: 1.75rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --gutter: 3.5rem;
+  }
+}
+
+/* --- Base --------------------------------------------------------------- */
 
 *,
 *::before,
@@ -47,50 +154,49 @@
   box-sizing: border-box;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   margin: 0;
   background: var(--background);
-  color: var(--body);
+  color: var(--foreground);
   font-family: var(--sans);
   font-size: 1rem;
-  line-height: 1.65;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-}
-
-/* The single ambient light source, behind everything, anchored where the
-   score ring sits. Fixed so it does not travel with the scroll. */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background:
-    radial-gradient(58rem 32rem at 50% -8rem, rgba(16, 185, 129, 0.14), transparent 70%),
-    radial-gradient(40rem 28rem at 88% 12%, rgba(52, 211, 153, 0.06), transparent 70%);
-  pointer-events: none;
+  overflow-x: hidden;
 }
 
 h1,
 h2,
-h3 {
-  font-family: var(--serif);
-  font-weight: 600;
-  color: var(--foreground);
-  letter-spacing: -0.015em;
-  line-height: 1.15;
+h3,
+p,
+figure,
+ul,
+ol {
   margin: 0;
 }
 
-p {
-  margin: 0;
+ul,
+ol {
+  padding: 0;
 }
 
 a {
   color: var(--brand-text);
 }
 
+img,
+svg,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
 :focus-visible {
-  outline: 2px solid var(--brand-text);
+  outline: 2px solid var(--ring);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -99,628 +205,20 @@ a {
   position: absolute;
   left: -9999px;
   top: 0;
+  z-index: 100;
   background: var(--brand);
   color: var(--brand-foreground);
   padding: 0.75rem 1rem;
   font-weight: 600;
-  z-index: 10;
+  border-radius: 0 0 var(--radius-sm) 0;
 }
 
 .skip:focus {
-  left: 1rem;
-  top: 1rem;
+  left: 0;
+  top: 0;
 }
 
-/* Inline padding only. Blocks that also want vertical padding set
-   padding-block, so the two never collide through the shorthand. */
-.wrap {
-  width: 100%;
-  max-width: 60rem;
-  margin: 0 auto;
-  padding-inline: 1.25rem;
-}
-
-/* --- Header --- */
-
-.masthead {
-  padding-block-start: 1.75rem;
-}
-
-.brandmark {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  font-family: var(--serif);
-  font-size: 1.2rem;
-  color: var(--foreground);
-  text-decoration: none;
-}
-
-.brandmark svg {
-  color: var(--brand-text);
-}
-
-/* --- Hero --- */
-
-/* The hero keeps the page's 60rem gutter so its left edge lines up with the
-   masthead and every section heading; the reading width is constrained on
-   the text itself instead. */
-.hero {
-  padding-block: 3.5rem 1rem;
-}
-
-.hero h1 {
-  max-width: 44rem;
-}
-
-.kicker {
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--brand-text);
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-.hero h1 {
-  font-size: clamp(2.1rem, 6.5vw, 3.5rem);
-}
-
-.hero .lead {
-  margin-top: 1.35rem;
-  font-size: clamp(1.02rem, 2.4vw, 1.18rem);
-  max-width: 38rem;
-}
-
-.hero .lead em {
-  font-family: var(--serif);
-  font-style: italic;
-  color: var(--brand-soft-foreground);
-  font-size: 1.06em;
-}
-
-/* --- Sections --- */
-
-section {
-  padding-block: 3.5rem;
-}
-
-.section-head {
-  max-width: 40rem;
-  margin-bottom: 2rem;
-}
-
-.section-head h2 {
-  font-size: clamp(1.5rem, 4vw, 2rem);
-}
-
-.section-head p {
-  margin-top: 0.75rem;
-  color: var(--muted);
-}
-
-/* --- Cards --- */
-
-.cards {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: 1fr;
-}
-
-@media (min-width: 46rem) {
-  .cards {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.card {
-  background: var(--card);
-  border: 1px solid var(--card-border);
-  border-radius: 1rem;
-  padding: 1.5rem;
-}
-
-.card svg {
-  color: var(--brand-text);
-}
-
-.card h3 {
-  font-size: 1.12rem;
-  margin: 0.9rem 0 0.5rem;
-}
-
-.card p {
-  font-size: 0.94rem;
-  color: var(--muted);
-}
-
-/* --- Panel (quiz + explorer share this frame) --- */
-
-.panel {
-  background: linear-gradient(180deg, rgba(4, 35, 26, 0.55), rgba(148, 163, 184, 0.04));
-  border: 1px solid var(--card-border);
-  border-radius: 1.25rem;
-  padding: clamp(1.35rem, 4vw, 2.25rem);
-}
-
-.meter {
-  height: 4px;
-  background: rgba(148, 163, 184, 0.18);
-  border-radius: 999px;
-  overflow: hidden;
-  margin-bottom: 1.5rem;
-}
-
-.meter span {
-  display: block;
-  height: 100%;
-  width: 0;
-  background: var(--brand);
-  border-radius: 999px;
-  transition: width 220ms ease;
-}
-
-.step-count {
-  font-size: 0.8rem;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--muted);
-  font-weight: 600;
-}
-
-.area {
-  margin-top: 0.35rem;
-  font-size: 0.95rem;
-  color: var(--brand-text);
-  font-weight: 600;
-}
-
-.question {
-  font-family: var(--serif);
-  font-size: clamp(1.25rem, 3.4vw, 1.7rem);
-  font-weight: 600;
-  color: var(--foreground);
-  line-height: 1.25;
-  margin: 0.75rem 0 1.5rem;
-  max-width: 34rem;
-}
-
-.answers {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-/* --- Buttons --- */
-
-.btn {
-  font: inherit;
-  font-weight: 600;
-  min-height: 44px;
-  padding: 0.6rem 1.35rem;
-  border-radius: 0.7rem;
-  border: 1px solid var(--card-border);
-  background: rgba(148, 163, 184, 0.07);
-  color: var(--foreground);
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  text-decoration: none;
-  transition:
-    background-color 150ms ease,
-    border-color 150ms ease,
-    transform 150ms ease;
-}
-
-.btn:hover {
-  background: rgba(52, 211, 153, 0.12);
-  border-color: var(--brand-text);
-}
-
-.btn:active {
-  transform: translateY(1px);
-}
-
-.btn-brand {
-  background: var(--brand);
-  color: var(--brand-foreground);
-  border-color: var(--brand);
-}
-
-.btn-brand:hover {
-  background: #34d399;
-  border-color: #34d399;
-}
-
-.btn-ghost {
-  background: none;
-  border-color: transparent;
-  color: var(--brand-text);
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-}
-
-.btn-ghost:hover {
-  background: rgba(52, 211, 153, 0.1);
-  border-color: transparent;
-}
-
-/* Carries its own spacing so that hiding it on the first question leaves no
-   gap behind. */
-.btn-back {
-  margin-top: 1.25rem;
-}
-
-.btn-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  align-items: center;
-}
-
-/* --- Result --- */
-
-.result {
-  display: grid;
-  gap: 1.75rem;
-  align-items: center;
-  grid-template-columns: 1fr;
-}
-
-@media (min-width: 40rem) {
-  .result {
-    grid-template-columns: auto 1fr;
-    gap: 2.25rem;
-  }
-}
-
-.ring {
-  width: 148px;
-  height: 148px;
-  flex: none;
-  justify-self: center;
-}
-
-.ring circle {
-  fill: none;
-  stroke-width: 10;
-  stroke-linecap: round;
-}
-
-.ring .track {
-  stroke: rgba(148, 163, 184, 0.18);
-}
-
-.ring .value {
-  stroke: var(--brand);
-  transform: rotate(-90deg);
-  transform-origin: 50% 50%;
-  transition: stroke-dashoffset 900ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.ring-figure {
-  position: relative;
-  display: grid;
-  place-items: center;
-}
-
-.ring-number {
-  position: absolute;
-  font-family: var(--serif);
-  font-size: 2.4rem;
-  font-weight: 600;
-  color: var(--foreground);
-  line-height: 1;
-}
-
-.band {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 600;
-  font-size: 0.86rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  padding: 0.3rem 0.7rem;
-  border-radius: 999px;
-  border: 1px solid currentColor;
-}
-
-.band-low {
-  color: var(--success);
-}
-
-.band-medium {
-  color: var(--warning);
-}
-
-.band-high {
-  color: #fdba74;
-}
-
-.band-critical {
-  color: var(--destructive);
-}
-
-.result h3 {
-  font-size: 1.35rem;
-  margin: 0.85rem 0 0.6rem;
-}
-
-.result p {
-  color: var(--body);
-}
-
-.result .aside {
-  margin-top: 0.9rem;
-  font-size: 0.9rem;
-  color: var(--muted);
-}
-
-/* --- Conditions explorer --- */
-
-.grid-conditions {
-  display: grid;
-  gap: 0.75rem;
-  grid-template-columns: repeat(2, 1fr);
-}
-
-@media (min-width: 46rem) {
-  .grid-conditions {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-.tile {
-  position: relative;
-  font: inherit;
-  text-align: left;
-  min-height: 8.5rem;
-  padding: 0.95rem;
-  border-radius: 0.85rem;
-  border: 1px solid var(--card-border);
-  background: rgba(15, 23, 42, 0.5);
-  color: var(--body);
-  cursor: pointer;
-  transition:
-    border-color 160ms ease,
-    background-color 160ms ease,
-    transform 160ms ease;
-}
-
-.tile:hover {
-  border-color: var(--brand-text);
-  transform: translateY(-2px);
-}
-
-.tile[aria-pressed="true"] {
-  background: var(--brand-soft);
-  border-color: rgba(52, 211, 153, 0.4);
-}
-
-.tile .num {
-  font-family: var(--serif);
-  font-size: 1.5rem;
-  color: var(--brand-text);
-  line-height: 1;
-}
-
-.tile .name {
-  display: block;
-  margin-top: 0.4rem;
-  font-weight: 600;
-  color: var(--foreground);
-  font-size: 0.92rem;
-  line-height: 1.3;
-}
-
-.tile .detail {
-  display: block;
-  margin-top: 0.4rem;
-  font-size: 0.82rem;
-  color: var(--brand-soft-foreground);
-  line-height: 1.45;
-}
-
-.tally {
-  margin-top: 1.1rem;
-  font-size: 0.92rem;
-  color: var(--muted);
-}
-
-.tally strong {
-  color: var(--brand-text);
-  font-weight: 600;
-}
-
-/* --- CTA + footer --- */
-
-.cta {
-  text-align: center;
-  border: 1px solid var(--card-border);
-  background: rgba(4, 35, 26, 0.45);
-  border-radius: 1.25rem;
-  padding: clamp(1.75rem, 5vw, 2.75rem);
-}
-
-.cta h2 {
-  font-size: clamp(1.4rem, 3.6vw, 1.9rem);
-}
-
-.cta p {
-  margin: 0.75rem auto 0;
-  max-width: 30rem;
-  color: var(--muted);
-}
-
-.cta .btn-row {
-  justify-content: center;
-  margin-top: 1.5rem;
-}
-
-.fineprint {
-  margin-top: 1rem;
-  font-size: 0.84rem;
-  color: var(--muted);
-}
-
-footer {
-  border-top: 1px solid var(--border);
-  margin-top: 3rem;
-  padding: 2rem 0 3rem;
-  font-size: 0.88rem;
-  color: var(--muted);
-}
-
-footer nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.25rem;
-  margin-top: 0.6rem;
-}
-
-footer a {
-  color: var(--muted);
-}
-
-footer a:hover {
-  color: var(--brand-text);
-}
-
-.disclaimer {
-  margin-top: 1.25rem;
-  font-size: 0.82rem;
-}
-
-/* --- Long-form content (guides and legal pages) --- */
-
-.article h1,
-.article .lead,
-.article .prose,
-.article .article-meta {
-  max-width: 44rem;
-}
-
-.article-meta {
-  margin-top: 1rem;
-  font-size: 0.88rem;
-  color: var(--muted);
-}
-
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 1rem;
-}
-
-.tag {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--brand-soft-foreground);
-  background: var(--brand-soft);
-  border: 1px solid var(--card-border);
-  border-radius: 999px;
-  padding: 0.2rem 0.65rem;
-}
-
-.prose {
-  margin-top: 2.5rem;
-}
-
-.prose h2 {
-  font-size: clamp(1.3rem, 3.4vw, 1.6rem);
-  margin: 2.5rem 0 0.85rem;
-}
-
-.prose h3 {
-  font-size: 1.1rem;
-  margin: 1.75rem 0 0.6rem;
-}
-
-.prose p,
-.prose ul,
-.prose ol {
-  margin: 0 0 1.1rem;
-}
-
-.prose ul,
-.prose ol {
-  padding-left: 1.35rem;
-}
-
-.prose li {
-  margin-bottom: 0.5rem;
-}
-
-.prose strong {
-  color: var(--foreground);
-  font-weight: 600;
-}
-
-.prose section {
-  margin-bottom: 2rem;
-}
-
-.prose table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 1.25rem;
-  font-size: 0.92rem;
-}
-
-.prose th,
-.prose td {
-  border: 1px solid var(--border);
-  padding: 0.5rem 0.7rem;
-  text-align: left;
-  vertical-align: top;
-}
-
-/* --- Post list --- */
-
-.post-list {
-  display: grid;
-  gap: 1rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.post-list a {
-  display: block;
-  padding: 1.4rem;
-  border: 1px solid var(--card-border);
-  border-radius: 1rem;
-  background: var(--card);
-  text-decoration: none;
-  transition:
-    border-color 160ms ease,
-    transform 160ms ease;
-}
-
-.post-list a:hover {
-  border-color: var(--brand-text);
-  transform: translateY(-2px);
-}
-
-.post-list h2 {
-  font-size: 1.2rem;
-}
-
-.post-list p {
-  margin-top: 0.5rem;
-  color: var(--muted);
-  font-size: 0.94rem;
-}
-
-.post-list .article-meta {
-  margin-top: 0.75rem;
-}
-
-.visually-hidden {
+.sr-only {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -736,13 +234,1170 @@ footer a:hover {
   display: none !important;
 }
 
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Prose lists want proportional figures: the browser's tabular ::marker pads
+   the digit and renders "1 ." rather than "1." in this face. */
+ol.prose-list > li::marker {
+  font-variant-numeric: proportional-nums;
+}
+
+/* --- Ambient layers ----------------------------------------------------- */
+
+/* The field sits behind everything. Painting it in front was the recorded
+   defect that made the mark read as noise over the headline. */
+#field {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+/* On a ground this dark an eight-bit panel bands across a gradient; the noise
+   is the dither that fixes it. It is drawn whether or not motion is on,
+   because the banding does not care, and it only moves when motion is on. */
+.grain {
+  position: fixed;
+  inset: -50%;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.055;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+html[data-motion="on"] .grain {
+  animation: grain 0.9s steps(4) infinite;
+}
+
+@keyframes grain {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-2%, 3%);
+  }
+  50% {
+    transform: translate(3%, -2%);
+  }
+  75% {
+    transform: translate(-3%, -3%);
+  }
+  100% {
+    transform: translate(2%, 2%);
+  }
+}
+
+/* --- Layout ------------------------------------------------------------- */
+
+.page {
+  position: relative;
+  z-index: 1;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 78rem;
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+section {
+  position: relative;
+  padding-block: clamp(3.5rem, 9vw, 7rem);
+}
+
+.rule-top {
+  border-top: 1px solid var(--glass-border);
+}
+
+/* --- Masthead ----------------------------------------------------------- */
+
+.masthead {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem var(--gutter);
+  background: var(--background);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* Two lines of masthead on a phone cost more vertical space than the four
+   extra words are worth, and the first viewport has an answer button to fit. */
+.on-wide {
+  display: none;
+}
+
+@media (min-width: 30rem) {
+  .on-wide {
+    display: inline;
+  }
+}
+
+.brandmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 44px;
+  color: var(--foreground);
+  text-decoration: none;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.brandmark svg {
+  width: 27px;
+  height: 15px;
+  flex: none;
+}
+
+/* --- Hero --------------------------------------------------------------- */
+
+.hero {
+  padding-block: clamp(2.5rem, 7vw, 5rem) clamp(3rem, 8vw, 6rem);
+}
+
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  margin-bottom: 1.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.kicker::before {
+  content: "";
+  width: 2.75rem;
+  height: 1px;
+  background: var(--accent-bright);
+  flex: none;
+}
+
+h1 {
+  max-width: 16em;
+  font-size: clamp(2.2rem, 5.6vw, 4.4rem);
+  font-weight: 800;
+  line-height: 1.03;
+  letter-spacing: -0.03em;
+}
+
+/* The one line per page the surface is allowed to be pretty. */
+.display-italic {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  color: var(--accent-bright);
+}
+
+.hero-grid {
+  display: grid;
+  gap: 2rem;
+  margin-top: 1.75rem;
+  align-items: start;
+}
+
+@media (min-width: 64rem) {
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 560px);
+    gap: 4rem;
+    margin-top: 2.5rem;
+  }
+}
+
+.lead {
+  max-width: 27rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+
+@media (min-width: 64rem) {
+  .lead {
+    font-size: 1.125rem;
+  }
+}
+
+/* --- The score ---------------------------------------------------------- */
+
+.score {
+  margin-top: 2rem;
+}
+
+.score-row {
+  display: flex;
+  align-items: baseline;
+  gap: 1.25rem;
+}
+
+.score-number {
+  font-size: clamp(3rem, 9vw, 8rem);
+  font-weight: 800;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+}
+
+.score-of {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+}
+
+.score-of span {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.9375rem;
+  font-weight: 400;
+}
+
+.score-ceiling {
+  margin-top: 0.75rem;
+  font-size: 1rem;
+  color: var(--warning);
+}
+
+.marks {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  max-width: 27.5rem;
+  list-style: none;
+}
+
+.marks li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--glass-border);
+  font-size: 1rem;
+}
+
+.marks .subject {
+  font-weight: 600;
+}
+
+.marks .answer {
+  display: block;
+  margin-top: 0.125rem;
+  font-size: 0.9375rem;
+  color: var(--muted-foreground);
+}
+
+.marks .earned {
+  flex: none;
+  font-weight: 600;
+  color: var(--accent-bright);
+}
+
+.marks .earned[data-zero="true"] {
+  color: var(--muted-foreground);
+}
+
+/* --- Glass panel -------------------------------------------------------- */
+
+/* The tint is fixed rather than variable: every contrast ratio the app
+   measures is measured against this exact composite, and a panel whose
+   opacity varies is a panel whose contrast is unknown. */
+.panel {
+  position: relative;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  background-image: linear-gradient(160deg, var(--glass-strong), var(--glass));
+  padding: 1rem;
+}
+
+@media (min-width: 40rem) {
+  .panel {
+    padding: 1.5rem;
+  }
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .panel {
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+  }
+
+  /* Blur is fill rate, and fill rate is what a mid-range phone runs out of
+     first. Half the radius below the tablet breakpoint. */
+  @media (max-width: 47.9375rem) {
+    .panel {
+      -webkit-backdrop-filter: blur(9px);
+      backdrop-filter: blur(9px);
+    }
+  }
+}
+
+/* Where the property does not exist the panel becomes a solid surface rather
+   than a transparent hole with text floating in it. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .panel {
+    background-image: none;
+    background-color: var(--muted);
+  }
+}
+
+/* --- The question ------------------------------------------------------- */
+
+.question-card fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.question-step {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-bright);
+}
+
+.question-text {
+  display: block;
+  margin-top: 0.625rem;
+  font-size: 1.1875rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+@media (min-width: 40rem) {
+  .question-text {
+    font-size: 1.3125rem;
+  }
+}
+
+.question-help {
+  margin-top: 0.5rem;
+  max-width: 30rem;
+  font-size: 1rem;
+  color: var(--muted-foreground);
+}
+
+.options {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.875rem;
+  list-style: none;
+}
+
+/* Every option is the same button. Styling one of four as the primary would
+   tell the reader which answer the page wants, on a page whose only value is
+   that the number is theirs. */
+.option {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.625rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgba(8, 8, 13, 0.4);
+  color: var(--foreground);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color var(--motion-fast) ease,
+    background-color var(--motion-fast) ease;
+}
+
+.option:hover {
+  border-color: var(--accent-bright);
+  background: rgba(8, 8, 13, 0.7);
+}
+
+.step-back {
+  margin-top: 0.75rem;
+  min-height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--foreground);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+.after-questions {
+  margin-top: 1.5rem;
+}
+
+.after-questions p {
+  max-width: 30rem;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+
+/* --- Buttons ------------------------------------------------------------ */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3.375rem;
+  padding: 0 1.75rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast) ease,
+    border-color var(--motion-fast) ease;
+}
+
+.btn-primary {
+  background: var(--brand);
+  color: var(--brand-foreground);
+  box-shadow: 0 8px 34px var(--brand-glow);
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+
+.btn-secondary {
+  border-color: var(--border);
+  color: var(--foreground);
+  background: none;
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent-bright);
+}
+
+/* --- Capability rows ---------------------------------------------------- */
+
+/* Rows on a rule, not a grid of equal cards. The card grid is a named
+   fail-on-sight pattern in this project's brief, and a list is the honest form
+   for a catalogue of what the product does. */
+.rows {
+  list-style: none;
+  margin-top: 2.5rem;
+  border-top: 1px solid var(--glass-border);
+}
+
+.rows > li {
+  display: grid;
+  gap: 0.375rem 2.5rem;
+  padding-block: 1.5rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+@media (min-width: 48rem) {
+  .rows > li {
+    grid-template-columns: minmax(0, 17rem) minmax(0, 1fr) auto;
+    align-items: baseline;
+  }
+}
+
+.row-name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.row-detail {
+  max-width: 33rem;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--muted-foreground);
+}
+
+.row-marks {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent-bright);
+  white-space: nowrap;
+}
+
+/* --- Conditions --------------------------------------------------------- */
+
+/* A disclosure list, so the law text is in the markup and the section is
+   complete with JavaScript off. The script only keeps the tally. */
+.conditions {
+  list-style: none;
+  margin-top: 2.5rem;
+  border-top: 1px solid var(--glass-border);
+}
+
+.conditions > li {
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.conditions details {
+  padding-block: 1.125rem;
+}
+
+.conditions summary {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  min-height: 2.75rem;
+  cursor: pointer;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  list-style: none;
+}
+
+.conditions summary::-webkit-details-marker {
+  display: none;
+}
+
+.conditions summary::after {
+  content: "";
+  margin-left: auto;
+  align-self: center;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-right: 2px solid var(--muted-foreground);
+  border-bottom: 2px solid var(--muted-foreground);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform var(--motion-base) var(--ease-stream);
+  flex: none;
+}
+
+.conditions details[open] summary::after {
+  transform: rotate(225deg) translate(-2px, -2px);
+}
+
+.conditions .num {
+  flex: none;
+  width: 1.75rem;
+  font-family: var(--display);
+  font-size: 1.25rem;
+  color: var(--accent-bright);
+}
+
+.conditions p {
+  max-width: 33rem;
+  margin-top: 0.625rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+
+@media (min-width: 40rem) {
+  .conditions p {
+    padding-left: 2.75rem;
+  }
+}
+
+.tally {
+  margin-top: 1.25rem;
+  font-size: 1rem;
+  color: var(--muted-foreground);
+}
+
+.tally strong {
+  color: var(--accent-bright);
+}
+
+/* --- Section headings --------------------------------------------------- */
+
+.section-head {
+  max-width: 44rem;
+}
+
+h2 {
+  max-width: 16em;
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+.section-head p {
+  margin-top: 1rem;
+  max-width: 29rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+
+/* --- Close -------------------------------------------------------------- */
+
+.close-scene {
+  text-align: left;
+}
+
+.close-scene h2 {
+  max-width: 16em;
+}
+
+.close-scene p {
+  margin-top: 1rem;
+  max-width: 30rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+
+.fineprint {
+  margin-top: 1.25rem;
+  font-size: 0.9375rem;
+  color: var(--muted-foreground);
+}
+
+/* --- Footer ------------------------------------------------------------- */
+
+footer {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  border-top: 1px solid var(--glass-border);
+  padding: 4rem var(--gutter) 3rem;
+}
+
+.footer-grid {
+  display: grid;
+  gap: 3rem;
+  max-width: 78rem;
+  margin: 0 auto;
+}
+
+/* The identity block holds the registration number, which is one long
+   unbreakable token. In a quarter-width column at 1024 it wrapped to three
+   lines of 43 characters, under the 45-character floor, so it keeps the full
+   width until there is room for four columns. */
+@media (min-width: 48rem) {
+  .footer-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .footer-identity {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 80rem) {
+  .footer-grid {
+    grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr));
+  }
+
+  .footer-identity {
+    grid-column: auto;
+  }
+}
+
+.footer-about {
+  margin-top: 0.75rem;
+  max-width: 24rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+
+footer h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+footer nav ul {
+  list-style: none;
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+footer nav a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  color: var(--foreground);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+footer nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0.65rem;
+  width: 100%;
+  height: 1px;
+  background: var(--accent-bright);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 350ms var(--ease-stream);
+}
+
+footer nav a:hover::after,
+footer nav a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.footer-note {
+  max-width: 26rem;
+  margin-top: 2.5rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+
+.watermark {
+  position: absolute;
+  left: 50%;
+  bottom: -0.24em;
+  transform: translateX(-50%);
+  font-size: clamp(90px, 16.5vw, 270px);
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--watermark-ink);
+  transition: -webkit-text-stroke-color 600ms;
+}
+
+footer:hover .watermark {
+  -webkit-text-stroke-color: var(--watermark-hover);
+}
+
+/* --- Motion toggle ------------------------------------------------------ */
+
+.motion-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-height: 2.75rem;
+  margin-top: 3rem;
+  padding: 0 1rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  background: none;
+  color: var(--foreground);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.motion-toggle:hover {
+  border-color: var(--accent-bright);
+}
+
+.motion-toggle .dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--muted-foreground);
+}
+
+html[data-motion="on"] .motion-toggle .dot {
+  background: var(--success);
+  box-shadow: 0 0 8px var(--success);
+}
+
+/* A control that does nothing when pressed is worse than no control, so it is
+   absent until the script confirms it can honour it. */
+html:not(.js) .motion-toggle,
+html:not(.js) /* Louder, by PJ's ruling of 2026-09-16, and still below the question so it
+   never stands between a reader and the first answer.
+   
+   It exists because honouring the operating system is right and invisible: a
+   reader whose desktop asks for less motion gets a still page and no idea
+   there is anything else. The page says so once, and the choice sticks. */
+.motion-offer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.875rem;
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--glass-border);
+  border-left: 2px solid var(--accent-bright);
+  border-radius: var(--radius-sm);
+  background: var(--brand-soft);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--foreground);
+}
+
+.motion-offer button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0 1.125rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: none;
+  color: var(--foreground);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color var(--motion-fast) ease;
+}
+
+.motion-offer button:hover {
+  border-color: var(--accent-bright);
+}
+
+.motion-offer button svg {
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+  fill: var(--accent-bright);
+}
+
+/* --- The scroll cue ----------------------------------------------------- */
+
+.cue {
+  display: none;
+}
+
+@media (min-width: 64rem) {
+  .cue {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    margin-top: 3rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+}
+
+.cue-wire {
+  position: relative;
+  width: 1px;
+  height: 44px;
+  overflow: hidden;
+  background: var(--wire);
+  flex: none;
+}
+
+.cue-wire::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--accent-bright);
+}
+
+html[data-motion="on"] .cue-wire::after {
+  top: -50%;
+  height: 50%;
+  animation: cue-drop 1.8s ease-in-out infinite;
+}
+
+@keyframes cue-drop {
+  0% {
+    top: -50%;
+  }
+  70%,
+  100% {
+    top: 110%;
+  }
+}
+
+/* --- Entrances ---------------------------------------------------------- */
+
+/* Every entrance starts from its finished state in the markup and is only
+   moved once the script has confirmed it can move it back. A reveal that
+   starts hidden in CSS is a page that is blank when JavaScript fails. */
+
+[data-reveal] {
+  transition:
+    opacity var(--motion-slow) var(--ease-stream),
+    transform var(--motion-slow) var(--ease-stream);
+}
+
+[data-reveal="out"] {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+}
+
+[data-reveal="in"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* A headline's lines rise out of their own clipped box, which is what makes it
+   read as type being set rather than as a block fading in. */
+.line-clip {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+}
+
+.line {
+  display: block;
+}
+
+html[data-motion="on"] .line {
+  animation: line-rise 1100ms var(--ease-stream) both;
+}
+
+html[data-motion="on"] .line-clip:nth-child(2) .line {
+  animation-delay: 110ms;
+}
+
+@keyframes line-rise {
+  from {
+    transform: translate3d(0, 112%, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+html[data-motion="on"] [data-enter="load"] {
+  animation: arrive var(--motion-slow) var(--ease-stream) both;
+}
+
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* The last defence. Everything above is already gated on the reader's own
+   preference through the data-motion attribute; this catches anything that
+   ships without asking. */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  html:not([data-motion="on"]) *,
+  html:not([data-motion="on"]) *::before,
+  html:not([data-motion="on"]) *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* --- Long-form: guides and legal pages ---------------------------------- */
+
+.article {
+  max-width: 46rem;
+}
+
+.article h1 {
+  max-width: 18em;
+  font-size: clamp(1.9rem, 4.4vw, 3rem);
+}
+
+.article-meta {
+  margin-top: 1rem;
+  font-size: 0.9375rem;
+  color: var(--muted-foreground);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  list-style: none;
+}
+
+.tag {
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  background: var(--brand-soft);
+  color: var(--brand-text);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* Hyphenated on a phone, and only on a phone. A 390px screen holds about 47
+   characters of 16px text, and unhyphenated prose containing words like
+   "Regulator" and "confirmation" wraps at 42, under the 45-character floor.
+   Letting the browser break a long word is what a typesetter does with a
+   narrow measure; above 40rem there is room and the rag is left alone. */
+.prose {
+  margin-top: 2.5rem;
+  font-size: 1rem;
+  hyphens: auto;
+  line-height: 1.7;
+  color: var(--foreground);
+}
+
+.prose p,
+.prose ul,
+.prose ol {
+  max-width: 33rem;
+  margin-bottom: 1.25rem;
+}
+
+.prose h2 {
+  margin: 2.75rem 0 1rem;
+  font-size: clamp(1.4rem, 3vw, 1.75rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.prose h3 {
+  margin: 2rem 0 0.75rem;
+  font-size: 1.1875rem;
+  font-weight: 700;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1rem;
+}
+
+@media (min-width: 40rem) {
+  .prose {
+    font-size: 1.0625rem;
+    hyphens: manual;
+  }
+
+  .prose ul,
+  .prose ol {
+    padding-left: 1.35rem;
+  }
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+}
+
+.prose a {
+  color: var(--brand-text);
+}
+
+.prose :is(p, li, div, dd) > a:only-child {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+}
+
+.prose strong {
+  font-weight: 700;
+}
+
+.prose section {
+  margin-bottom: 2rem;
+}
+
+.prose table {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  border-collapse: collapse;
+  font-size: 1rem;
+}
+
+.prose th,
+.prose td {
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--glass-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose th {
+  font-weight: 700;
+}
+
+/* --- Post list ---------------------------------------------------------- */
+
+.post-list {
+  list-style: none;
+  margin-top: 2.5rem;
+  border-top: 1px solid var(--glass-border);
+}
+
+.post-list > li {
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.post-list a {
+  display: grid;
+  gap: 0.5rem;
+  /* Half the 8px WCAG 2.5.8 asks between adjacent targets, top and bottom, so
+     two rows of the list are never a pixel apart. */
+  margin-block: 0.25rem;
+  padding-block: 1.5rem;
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+@media (min-width: 48rem) {
+  .post-list a {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 22rem);
+    gap: 2.5rem;
+    align-items: baseline;
+  }
+}
+
+.post-list h2 {
+  font-size: 1.3125rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.post-list a:hover h2 {
+  color: var(--accent-bright);
+}
+
+.post-list p {
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--muted-foreground);
+}
+
+/* --- Notices ------------------------------------------------------------ */
+
+.notice {
+  max-width: 26rem;
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  border-left: 2px solid var(--accent-bright);
+  background: var(--brand-soft);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--foreground);
 }

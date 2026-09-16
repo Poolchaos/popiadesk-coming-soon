@@ -4,315 +4,251 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>POPIAdesk - POPIA compliance software for South African businesses</title>
-    <meta
-      name="description"
-      content="Generate POPIA documents, track a live compliance score, and manage data subject requests. Built for South African businesses. Opening soon."
-    />
+    <meta name="description" content="Answer 25 plain questions and see your POPIA readiness score out of 100, free and without an account. POPIAdesk opens to customers soon." />
     <link rel="canonical" href="https://popiadesk.co.za/" />
     <meta name="robots" content="index,follow" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="POPIAdesk" />
     <meta property="og:locale" content="en_ZA" />
-    <meta property="og:title" content="POPIAdesk - POPIA compliance software" />
-    <meta
-      property="og:description"
-      content="Generate POPIA documents, track a live compliance score, and manage data subject requests. Built for South African businesses."
-    />
+    <meta property="og:title" content="POPIAdesk - POPIA compliance software for South African businesses" />
+    <meta property="og:description" content="Answer 25 plain questions and see your POPIA readiness score out of 100, free and without an account. POPIAdesk opens to customers soon." />
     <meta property="og:url" content="https://popiadesk.co.za/" />
     <meta property="og:image" content="https://popiadesk.co.za/assets/og.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="POPIAdesk - POPIA compliance software" />
-    <meta
-      name="twitter:description"
-      content="Generate POPIA documents, track a live compliance score, and manage data subject requests. Built for South African businesses."
-    />
+    <meta name="twitter:title" content="POPIAdesk - POPIA compliance software for South African businesses" />
+    <meta name="twitter:description" content="Answer 25 plain questions and see your POPIA readiness score out of 100, free and without an account. POPIAdesk opens to customers soon." />
     <meta name="twitter:image" content="https://popiadesk.co.za/assets/og.png" />
-    <meta name="theme-color" content="#0f172a" />
+    <meta name="theme-color" content="#08080d" />
     <link rel="icon" href="/assets/icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/assets/icon-192.png" />
+    <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/schibsted-grotesk-400-900-normal.woff2" crossorigin />
     <link rel="stylesheet" href="/assets/site.css" />
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "POPIAdesk",
-        "url": "https://popiadesk.co.za",
-        "email": "hello@popiadesk.co.za",
-        "description": "POPIA compliance software for South African businesses.",
-        "areaServed": "ZA"
-      }
+    <script>
+      // Marks the root before first paint, so a stylesheet rule can hide a
+      // control that cannot work without JavaScript. Nothing else depends on
+      // it: the page is complete whether or not this runs.
+      document.documentElement.classList.add("js");
     </script>
   </head>
   <body>
     <a class="skip" href="#content">Skip to content</a>
-
+    <canvas id="field" aria-hidden="true"></canvas>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="page">
     <header class="masthead">
-      <div class="wrap">
-        <a class="brandmark" href="/">
-          <svg
-            width="26"
-            height="26"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path
-              d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
-            />
-            <path d="m9 12 2 2 4-4" />
-          </svg>
-          POPIAdesk
-        </a>
-      </div>
+      <a class="brandmark" href="/"><svg viewBox="0 0 33 18" aria-hidden="true" fill="none"><path d="M0 0h5v18H0zM7 0h5v18H7zM14 0h5v18h-5z" fill="var(--accent-bright)" /><path d="M21 0h5v18h-5zM22.2 1.2h2.6v15.6h-2.6zM28 0h5v18h-5zM29.2 1.2h2.6v15.6h-2.6z" fill="var(--foreground)" fill-rule="evenodd" /></svg> POPIAdesk</a>
+      <a class="btn btn-secondary" href="mailto:hello@popiadesk.co.za?subject=Tell%20me%20when%20POPIAdesk%20opens">Get a note<span class="on-wide"> when it opens</span></a>
     </header>
-
-    <main id="content">
-      <div class="wrap hero">
-        <p class="kicker">Not open yet</p>
-        <h1>POPIA compliance for South African businesses.</h1>
-        <p class="lead">
-          POPIAdesk generates your core POPIA documents, tracks a live compliance score,
-          and manages data subject requests against their deadlines. The product is built.
-          We are putting the last pieces in place before opening it up.
-          <em>In the meantime, find out where you stand.</em>
-        </p>
-        <div class="btn-row" style="margin-top: 1.75rem">
-          <a class="btn btn-brand" href="#readiness">
-            Take the readiness check
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
-            </svg>
-          </a>
-          <a class="btn" href="/blog">Read the guides</a>
-        </div>
-      </div>
-
-      <section class="wrap" aria-labelledby="what">
-        <div class="section-head">
-          <h2 id="what">What opens with the product</h2>
-        </div>
-        <div class="cards">
-          <div class="card">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <path
-                d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"
-              />
-              <path d="M14 2v5a1 1 0 0 0 1 1h5" />
-              <path d="M10 9H8" />
-              <path d="M16 13H8" />
-              <path d="M16 17H8" />
-            </svg>
-            <h3>Document generation</h3>
-            <p>
-              Draft 10 POPIA documents in minutes: privacy policy, PAIA manual, DPAs,
-              consent forms, breach notifications and more.
-            </p>
-          </div>
-          <div class="card">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <path d="m12 14 4-4" />
-              <path d="M3.34 19a10 10 0 1 1 17.32 0" />
-            </svg>
-            <h3>Live compliance score</h3>
-            <p>
-              A real-time score across governance, documentation and operational
-              readiness, so you always know exactly where you stand.
-            </p>
-          </div>
-          <div class="card">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <rect x="2" y="4" width="20" height="16" rx="2" />
-              <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" />
-            </svg>
-            <h3>Data subject requests</h3>
-            <p>
-              A branded public intake form, 30-day deadline tracking, and response
-              templates, with reminders as each deadline approaches.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section class="wrap" id="readiness" aria-labelledby="readiness-title">
-        <div class="section-head">
-          <h2 id="readiness-title">Where does your business stand?</h2>
-          <p>
-            Eight questions, one for each area the full assessment covers. Provisional by
-            design: the 25-question assessment, with recommendations written for your
-            answers, opens with the product.
-          </p>
-        </div>
-
-        <div class="panel" data-teaser>
-          <div class="meter" aria-hidden="true"><span data-meter></span></div>
-
-          <div data-quiz-view>
-            <p class="step-count" data-step-count></p>
-            <p class="area" data-area></p>
-            <h3 class="question" tabindex="-1" data-question></h3>
-            <div class="answers" data-answers></div>
-            <button type="button" class="btn btn-ghost btn-back" data-back>
-              Back to the previous question
-            </button>
-          </div>
-
-          <div data-result-view hidden>
-            <div class="result">
-              <div class="ring-figure">
-                <svg class="ring" viewBox="0 0 148 148" aria-hidden="true">
-                  <circle class="track" cx="74" cy="74" r="64"></circle>
-                  <circle class="value" cx="74" cy="74" r="64" data-ring-value></circle>
-                </svg>
-                <span class="ring-number" data-ring-number aria-hidden="true">0</span>
-              </div>
-              <div>
-                <span class="band" data-band></span>
-                <h3 tabindex="-1" data-result-heading></h3>
-                <p data-result-body></p>
-                <p class="aside">
-                  POPIAdesk generates the documents and tracks the deadlines behind every
-                  one of those questions.
-                </p>
-                <div class="btn-row" style="margin-top: 1.25rem">
-                  <a
-                    class="btn btn-brand"
-                    href="mailto:hello@popiadesk.co.za?subject=Tell%20me%20when%20POPIAdesk%20opens"
-                    >Get a note when it opens</a
-                  >
-                  <a class="btn" href="/blog/popia-compliance-checklist-small-businesses"
-                    >Read the checklist</a
-                  >
-                  <button type="button" class="btn btn-ghost" data-copy>
-                    Copy your result
-                  </button>
-                  <button type="button" class="btn btn-ghost" data-restart>
-                    Start over
-                  </button>
-                </div>
-              </div>
+      <main id="content">
+        <section class="wrap hero">
+          <p class="kicker" data-reveal data-enter="load">Not open yet</p>
+          <h1 data-lines>
+            <span class="line-clip"><span class="line">A client asked for your privacy policy.</span></span>
+            <span class="line-clip"><span class="line display-italic">Start with your POPIA score.</span></span>
+          </h1>
+          <div class="hero-grid">
+            <div>
+              <p class="lead" data-reveal data-enter="load">
+                The assessment is open now. Answer one question and your
+                score starts.
+              </p>
+<div class="score" data-score>
+            <div class="score-row">
+              <span class="score-number tabular" data-score-number aria-hidden="true">0</span>
+              <span class="score-of">
+                of 100
+                <span data-score-remaining>25 questions to go</span>
+              </span>
             </div>
-            <p
-              class="visually-hidden"
-              role="status"
-              aria-live="polite"
-              data-result-summary
-            ></p>
+            <p class="sr-only" role="status" aria-live="polite" data-score-announce>
+              Your POPIA readiness score is 0 out of 100, from 0 of 25 questions.
+            </p>
+            <p class="score-ceiling" data-ceiling hidden></p>
+            <ul class="marks" data-marks></ul>
           </div>
-        </div>
-      </section>
+              <p class="cue" aria-hidden="true"><span class="cue-wire"></span> Scroll</p>
+            </div>
+            <div>
+              <div class="panel question-card" data-question-card>
+<fieldset data-question="q11">
+              <legend class="contents">
+                <span class="question-step">Question 1 of 25</span>
+                <span class="question-text">Does your organisation have a privacy policy / notice?</span>
+              </legend>
+              <ul class="options" data-options>
+                <li><button type="button" class="option" data-value="3">Yes, published and easily accessible</button></li>
+                <li><button type="button" class="option" data-value="2">Yes, but not easily accessible</button></li>
+                <li><button type="button" class="option" data-value="1">In development</button></li>
+                <li><button type="button" class="option" data-value="0">No</button></li>
+              </ul>
+              <noscript>
+                <p class="question-help">
+                  The score is worked out in your browser, so answering needs
+                  JavaScript. The guides below cover the same ground in full.
+                </p>
+              </noscript>
+            </fieldset>
+              </div>
+              <p class="motion-offer" data-motion-offer hidden>
+                <span>Your device asks for less motion, so this page is holding still.</span>
+                <button type="button" data-motion-show><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3" /></svg> Show me the motion</button>
+              </p>
+            </div>
+          </div>
+        </section>
 
-      <section class="wrap" aria-labelledby="conditions-title">
-        <div class="section-head">
-          <h2 id="conditions-title">The eight conditions, in plain terms</h2>
-          <p>
-            Every duty in the Act hangs off one of these eight. Open each one to see what
-            it asks of you.
+        <section class="wrap rule-top" aria-labelledby="what">
+          <div class="section-head">
+            <h2 id="what" data-reveal>What opens with the product</h2>
+            <p data-reveal>
+              The assessment above is the first of the five parts POPIAdesk
+              measures. These are the other four, and what each is worth out of
+              a hundred.
+            </p>
+          </div>
+          <ul class="rows" data-reveal>
+            <li>
+              <span class="row-name">Document coverage</span>
+              <span class="row-detail">Ten POPIA documents drafted from plain questions about your business.</span>
+              <span class="row-marks">25 marks</span>
+            </li>
+            <li>
+              <span class="row-name">Data subject requests</span>
+              <span class="row-detail">Data subject requests logged, with the thirty-day deadline tracked.</span>
+              <span class="row-marks">15 marks</span>
+            </li>
+            <li>
+              <span class="row-name">Supplier compliance</span>
+              <span class="row-detail">The operators who process data for you, and their written agreements.</span>
+              <span class="row-marks">15 marks</span>
+            </li>
+            <li>
+              <span class="row-name">Data map</span>
+              <span class="row-detail">What personal information you hold, where it lives, and how long you keep it.</span>
+              <span class="row-marks">15 marks</span>
+            </li>
+          </ul>
+          <p class="notice">
+            The documents it generates: Privacy Policy, PAIA Manual, Consent Form, Data Processing Agreement, Breach Notification Template, Information Officer Appointment, Marketing Consent Form, Employee Privacy Notice, Cookie Policy, Retention Schedule.
           </p>
-        </div>
-        <div data-explorer>
-          <div class="grid-conditions" data-conditions></div>
+        </section>
+
+        <section class="wrap rule-top" aria-labelledby="conditions">
+          <div class="section-head">
+            <h2 id="conditions" data-reveal>The eight conditions, in plain terms</h2>
+            <p data-reveal>
+              Every duty in the Act hangs off one of these eight. Open each one to
+              see what it asks of you.
+            </p>
+          </div>
+          <ul class="conditions" data-conditions>
+            <li>
+              <details>
+                <summary><span class="num" aria-hidden="true">1</span> Accountability</summary>
+                <p>The responsible party must ensure compliance with all conditions.</p>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary><span class="num" aria-hidden="true">2</span> Processing limitation</summary>
+                <p>Information must be processed lawfully and in a reasonable manner.</p>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary><span class="num" aria-hidden="true">3</span> Purpose specification</summary>
+                <p>Information must be collected for a specific, explicitly defined, and lawful purpose.</p>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary><span class="num" aria-hidden="true">4</span> Further processing limitation</summary>
+                <p>Information must not be processed in a way incompatible with the original purpose.</p>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary><span class="num" aria-hidden="true">5</span> Information quality</summary>
+                <p>Steps must be taken to ensure information is complete, accurate, and up to date.</p>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary><span class="num" aria-hidden="true">6</span> Openness</summary>
+                <p>Data subjects must be made aware of the collection and processing of their information.</p>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary><span class="num" aria-hidden="true">7</span> Security safeguards</summary>
+                <p>Appropriate security measures must be in place to protect personal information.</p>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary><span class="num" aria-hidden="true">8</span> Data subject participation</summary>
+                <p>Data subjects have the right to access, correct, and delete their information.</p>
+              </details>
+            </li>
+          </ul>
           <p class="tally" data-tally aria-live="polite"></p>
-        </div>
-      </section>
+        </section>
 
-      <section class="wrap">
-        <div class="cta">
-          <h2>Want to know when it opens?</h2>
-          <p>
-            Send us an email and we will reply once, on the day POPIAdesk opens to
-            customers.
+        <section class="wrap rule-top close-scene">
+          <h2 data-reveal>Want to know when it opens?</h2>
+          <p data-reveal>
+            Send us an email and we will reply once, on the day POPIAdesk opens
+            to customers.
           </p>
-          <div class="btn-row">
-            <a
-              class="btn btn-brand"
-              href="mailto:hello@popiadesk.co.za?subject=Tell%20me%20when%20POPIAdesk%20opens"
-            >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <rect x="2" y="4" width="20" height="16" rx="2" />
-                <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" />
-              </svg>
-              Email hello@popiadesk.co.za
-            </a>
+          <div class="actions">
+            <a class="btn btn-primary" href="mailto:hello@popiadesk.co.za?subject=Tell%20me%20when%20POPIAdesk%20opens">Email hello@popiadesk.co.za</a>
+            <a class="btn btn-secondary" href="/blog">Read the guides</a>
           </div>
           <p class="fineprint">One reply when we open. No list, no newsletter.</p>
-        </div>
-      </section>
-    </main>
-
+        </section>
+      </main>
     <footer>
-      <div class="wrap">
-        <p>
-          POPIAdesk, South Africa.
-          <a href="mailto:hello@popiadesk.co.za">hello@popiadesk.co.za</a>
-        </p>
-        <nav aria-label="Site">
-          <a href="/blog">Guides</a>
-          <a href="/privacy">Privacy policy</a>
-          <a href="/terms">Terms</a>
-          <a href="/accessibility">Accessibility</a>
+      <span class="watermark" aria-hidden="true">POPIAdesk</span>
+      <div class="footer-grid">
+        <div class="footer-identity">
+          <a class="brandmark" href="/"><svg viewBox="0 0 33 18" aria-hidden="true" fill="none"><path d="M0 0h5v18H0zM7 0h5v18H7zM14 0h5v18h-5z" fill="var(--accent-bright)" /><path d="M21 0h5v18h-5zM22.2 1.2h2.6v15.6h-2.6zM28 0h5v18h-5zM29.2 1.2h2.6v15.6h-2.6z" fill="var(--foreground)" fill-rule="evenodd" /></svg> POPIAdesk</a>
+          <p class="footer-about">POPIA compliance software for South African businesses.</p>
+          <p class="footer-about">Operated by Lightfast Digital (Pty) Ltd, registration 2026/652553/07.</p>
+          <p class="footer-about">Bellville, Western Cape.</p>
+          <button type="button" class="motion-toggle" data-motion-toggle aria-pressed="false">
+            <span class="dot" aria-hidden="true"></span> Motion off
+          </button>
+        </div>
+        <nav aria-label="On this site">
+          <h2>On this site</h2>
+          <ul>
+            <li><a href="/assess">Readiness assessment</a></li>
+            <li><a href="/blog">Guides</a></li>
+          </ul>
         </nav>
-        <p class="disclaimer">
-          The guides and the readiness check on this site are general information about
-          POPIA, not legal advice.
-        </p>
+        <nav aria-label="Legal">
+          <h2>Legal</h2>
+          <ul>
+            <li><a href="/privacy">Privacy policy</a></li>
+            <li><a href="/terms">Terms</a></li>
+            <li><a href="/accessibility">Accessibility</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Contact">
+          <h2>Contact</h2>
+          <ul>
+            <li><a href="mailto:hello@popiadesk.co.za">hello@popiadesk.co.za</a></li>
+          </ul>
+        </nav>
       </div>
+      <p class="footer-note">
+        POPIAdesk is software, not a law firm, and nothing it produces is legal
+        advice. A score is not a defence. While the product is closed this site
+        is a set of static files served by GitHub Pages; our privacy policy
+        describes the product itself.
+      </p>
     </footer>
-
-    <script src="/assets/site.js"></script>
+    </div>
+    <script type="module" src="/assets/site.js"></script>
   </body>
 </html>

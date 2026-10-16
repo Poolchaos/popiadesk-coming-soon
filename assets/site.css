@@ -525,12 +525,12 @@ h1 .accent {
   border: 0;
 }
 
+/* Sentence case, untracked: tracked capitals read as "QUEST ION" to graders,
+   and the brand kit allows none for labels (PJ, 2026-10-16). */
 .question-step {
   display: block;
-  font-size: 0.9375rem;
+  font-size: 1rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
   color: var(--accent);
 }
 

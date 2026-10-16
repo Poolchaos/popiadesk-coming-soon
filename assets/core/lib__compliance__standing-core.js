@@ -185,7 +185,7 @@ function tasksForTier(tier, input, assessment, score, now) {
     const threshold = TIER_SCORE_THRESHOLDS[tier];
     tasks.push({
         id: "score",
-        label: `Reach a compliance score of ${threshold}% (now ${score}%)`,
+        label: `Reach a score of ${threshold} out of 100 (now ${score})`,
         href: "/compliance-report",
         done: score >= threshold,
     });

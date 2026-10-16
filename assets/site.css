@@ -1,26 +1,20 @@
-/* POPIAdesk interim site, on the Shield and Stream surface.
+/* The interim site's stylesheet, on the report surface (direction C, PJ
+ * 2026-10-16): white paper, ink rules, a green-grey wash where the reader's
+ * own result sits, one teal for action and progress, and one red for the
+ * verdict. It mirrors the app's `[data-surface="report"]` block in
+ * src/app/globals.css; the two are kept in step by hand, so a token changed
+ * there is changed here in the same commit.
  *
- * The token values below are copied verbatim from the `[data-surface="stream"]`
- * block in src/app/globals.css, which is where they are defined and where their
- * contrast ratios are measured (scripts/contrast-audit.mjs). A tripwire unit
- * test compares the two, so this copy cannot drift silently.
- *
- * Every `color-mix()` in the app's stylesheet is written out here as a plain
- * rgba(). The function is Safari 16.2 and later; the interim site is the only
- * thing the company has running and it should not lose a hairline on an iPhone
- * a year old. The values are the same colours, resolved by hand.
- *
- * This surface is a single dark theme by decision (DESIGN-BRIEF section 5,
- * 2026-09-07): the obsidian ground and the cyan accent are a fixed brand axis,
- * not a default.
+ * Contrast measured 2026-10-16 (WCAG 2.2 relative luminance): ink 17.75:1 on
+ * white and 15.94:1 on the wash; muted text 7.19:1 and 6.45:1; teal 6.11:1 and
+ * 5.49:1; red 6.53:1 and 5.86:1; control borders 4.40:1 and 3.95:1.
  */
 
 /* --- Faces -------------------------------------------------------------- */
 
-/* Latin subsets, self-hosted. The site makes zero external requests, which is
-   a gate in tools/verify.mjs, so Google's CSS API is used at authoring time
-   (tools/fonts.mjs) and never by a visitor's browser. Both faces are SIL Open
-   Font License 1.1. */
+/* Latin subset, self-hosted. The site makes zero external requests, which is
+   a gate in tools/verify.mjs. SIL Open Font License 1.1. One family: the
+   report surface sets everything in the sans. */
 
 @font-face {
   font-family: "Schibsted Grotesk";
@@ -33,35 +27,10 @@
     U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-@font-face {
-  font-family: "Playfair Display";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("fonts/playfair-display-500-normal.woff2") format("woff2");
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
-    U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: "Playfair Display";
-  font-style: italic;
-  font-weight: 500;
-  font-display: swap;
-  src: url("fonts/playfair-display-500-italic.woff2") format("woff2");
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
-    U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-/* Metric-matched fallbacks, so the headline does not reflow when the webfont
-   lands. The overrides are computed the way next/font computes them, from the
-   same capsize metrics table the app builds against (checked 2026-09-16):
-   size-adjust is the ratio of average character widths normalised by units per
-   em, and the ascent and descent are scaled by it. Without these the retired
-   build's CLS went from 0.0285 to 0.0998 against a 0.1 budget. */
-
+/* Metric-matched fallback, so the headline does not reflow when the webfont
+   lands; computed the way next/font computes it, from the same capsize table
+   (checked 2026-09-16). Without it the retired build's CLS went from 0.0285 to
+   0.0998 against a 0.1 budget. */
 @font-face {
   font-family: "Schibsted Fallback";
   src: local("Arial");
@@ -71,79 +40,33 @@
   line-gap-override: 0%;
 }
 
-@font-face {
-  font-family: "Playfair Fallback";
-  src: local("Times New Roman");
-  size-adjust: 111.26%;
-  ascent-override: 97.25%;
-  descent-override: 22.56%;
-  line-gap-override: 0%;
-}
-
 /* --- Tokens ------------------------------------------------------------- */
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
-  --background: #08080d;
-  --foreground: #edeff6;
-  --card: #0a1124;
-  --muted: #121a2e;
-  --muted-foreground: #98a0b5;
-  --border: #6e768a;
-  --ring: #06b6d4;
+  --background: #ffffff;
+  --foreground: #0c1a1f;
+  --wash: #eef4f2;
+  --muted-foreground: #4a5a60;
+  --hairline: #d6e0dd;
+  --rule: #0c1a1f;
+  --border: #6b7b80;
+  --ring: #0b6e66;
+  --accent: #0b6e66;
+  --verdict: #b4232c;
 
-  --brand: #2563eb;
-  --brand-foreground: #ffffff;
-  --brand-text: #9db9ff;
-  --brand-soft: #0d1731;
-  --primary-dark: #1d4ed8;
-  --accent-bright: #06b6d4;
-
-  --glass: rgba(255, 255, 255, 0.06);
-  --glass-strong: rgba(255, 255, 255, 0.09);
-  --glass-border: rgba(255, 255, 255, 0.12);
-
-  --success: #10b981;
-  --success-soft-foreground: #6ee7b7;
-  --warning: #fbbf24;
-  --warning-soft-foreground: #fcd34d;
-  --destructive: #f87171;
-  --destructive-soft-foreground: #fca5a5;
-  --info: #38bdf8;
-
-  /* Resolved from color-mix() in globals.css, same colours. */
-  --brand-glow: rgba(37, 99, 235, 0.35);
-  --panel-shadow: rgba(0, 0, 0, 0.6);
-  --wire: rgba(237, 239, 246, 0.2);
-  --watermark-ink: rgba(237, 239, 246, 0.08);
-  --watermark-hover: rgba(6, 182, 212, 0.18);
-
-  --radius: 1.25rem;
-  --radius-sm: 0.75rem;
-  --ease-stream: cubic-bezier(0.19, 1, 0.22, 1);
+  --radius: 0.375rem;
+  --ease: cubic-bezier(0.19, 1, 0.22, 1);
   --motion-fast: 200ms;
-  --motion-base: 300ms;
-  --motion-slow: 900ms;
+  --motion-slow: 800ms;
 
   --sans:
     "Schibsted Grotesk", "Schibsted Fallback", "Helvetica Neue", "Segoe UI", system-ui,
     sans-serif;
-  --display: "Playfair Display", "Playfair Fallback", Georgia, "Times New Roman", serif;
 
-  --gutter: 0.875rem;
-}
-
-@media (min-width: 40rem) {
-  :root {
-    --gutter: 1.75rem;
-  }
-}
-
-@media (min-width: 64rem) {
-  :root {
-    --gutter: 3.5rem;
-  }
+  --gutter: 1.25rem;
+  --sheet: min(72.5rem, calc(100% - 2 * var(--gutter)));
 }
 
 /* --- Base --------------------------------------------------------------- */
@@ -185,12 +108,11 @@ ol {
 }
 
 a {
-  color: var(--brand-text);
+  color: var(--accent);
 }
 
 img,
-svg,
-canvas {
+svg {
   display: block;
   max-width: 100%;
 }
@@ -198,7 +120,7 @@ canvas {
 :focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 3px;
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
 .skip {
@@ -206,16 +128,14 @@ canvas {
   left: -9999px;
   top: 0;
   z-index: 100;
-  background: var(--brand);
-  color: var(--brand-foreground);
+  background: var(--foreground);
+  color: var(--background);
   padding: 0.75rem 1rem;
-  font-weight: 600;
-  border-radius: 0 0 var(--radius-sm) 0;
+  font-weight: 700;
 }
 
 .skip:focus {
   left: 0;
-  top: 0;
 }
 
 .sr-only {
@@ -238,81 +158,30 @@ canvas {
   font-variant-numeric: tabular-nums;
 }
 
-/* Prose lists want proportional figures: the browser's tabular ::marker pads
-   the digit and renders "1 ." rather than "1." in this face. */
 ol.prose-list > li::marker {
   font-variant-numeric: proportional-nums;
 }
 
-/* --- Ambient layers ----------------------------------------------------- */
-
-/* The field sits behind everything. Painting it in front was the recorded
-   defect that made the mark read as noise over the headline. */
-#field {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  mix-blend-mode: screen;
-}
-
-/* On a ground this dark an eight-bit panel bands across a gradient; the noise
-   is the dither that fixes it. It is drawn whether or not motion is on,
-   because the banding does not care, and it only moves when motion is on. */
-.grain {
-  position: fixed;
-  inset: -50%;
-  z-index: 2;
-  pointer-events: none;
-  opacity: 0.055;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-html[data-motion="on"] .grain {
-  animation: grain 0.9s steps(4) infinite;
-}
-
-@keyframes grain {
-  0% {
-    transform: translate(0, 0);
-  }
-  25% {
-    transform: translate(-2%, 3%);
-  }
-  50% {
-    transform: translate(3%, -2%);
-  }
-  75% {
-    transform: translate(-3%, -3%);
-  }
-  100% {
-    transform: translate(2%, 2%);
-  }
+/* Controls that only work with JavaScript are not drawn without it; the page
+   says what still reads instead. `js` is set before first paint. */
+html:not(.js) [data-needs-js] {
+  display: none;
 }
 
 /* --- Layout ------------------------------------------------------------- */
 
-.page {
-  position: relative;
-  z-index: 1;
-}
-
 .wrap {
-  width: 100%;
-  max-width: 78rem;
+  width: var(--sheet);
   margin: 0 auto;
-  padding-inline: var(--gutter);
 }
 
 section {
   position: relative;
-  padding-block: clamp(3.5rem, 9vw, 7rem);
+  padding-block: clamp(3rem, 8vw, 6rem);
 }
 
 .rule-top {
-  border-top: 1px solid var(--glass-border);
+  border-top: 1px solid var(--hairline);
 }
 
 /* --- Masthead ----------------------------------------------------------- */
@@ -321,17 +190,22 @@ section {
   position: sticky;
   top: 0;
   z-index: 60;
+  background: var(--background);
+}
+
+.masthead-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.75rem var(--gutter);
-  background: var(--background);
-  border-bottom: 1px solid var(--glass-border);
+  width: var(--sheet);
+  min-height: 4.25rem;
+  margin: 0 auto;
+  border-bottom: 2px solid var(--rule);
 }
 
-/* Two lines of masthead on a phone cost more vertical space than the four
-   extra words are worth, and the first viewport has an answer button to fit. */
+/* Two lines of masthead on a phone cost more height than four words are
+   worth, and the first viewport has an answer button to fit. */
 .on-wide {
   display: none;
 }
@@ -360,67 +234,143 @@ section {
   flex: none;
 }
 
-/* --- Hero --------------------------------------------------------------- */
+/* --- The sheet ---------------------------------------------------------- */
 
-.hero {
-  padding-block: clamp(2.5rem, 7vw, 5rem) clamp(3rem, 8vw, 6rem);
-}
-
-.kicker {
-  display: flex;
-  align-items: center;
-  gap: 0.875rem;
-  margin-bottom: 1.25rem;
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted-foreground);
-}
-
-.kicker::before {
-  content: "";
-  width: 2.75rem;
-  height: 1px;
-  background: var(--accent-bright);
-  flex: none;
-}
-
-h1 {
-  max-width: 16em;
-  font-size: clamp(2.2rem, 5.6vw, 4.4rem);
-  font-weight: 800;
-  line-height: 1.03;
-  letter-spacing: -0.03em;
-}
-
-/* The one line per page the surface is allowed to be pretty. */
-.display-italic {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 500;
-  color: var(--accent-bright);
-}
-
-.hero-grid {
-  display: grid;
-  gap: 2rem;
-  margin-top: 1.75rem;
-  align-items: start;
+/* The report itself: one bordered sheet whose heading row names it, with the
+   headline written on it, the question on it and the reader's own score in
+   its wash panel. */
+.sheet {
+  width: var(--sheet);
+  margin: 1.75rem auto;
+  padding: 0;
+  border: 2px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--background);
 }
 
 @media (min-width: 64rem) {
-  .hero-grid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 560px);
-    gap: 4rem;
-    margin-top: 2.5rem;
+  .sheet {
+    margin-block: 2.5rem;
   }
 }
 
+.sheet-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 2px solid var(--rule);
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.sheet-head .accent {
+  color: var(--accent);
+}
+
+.sheet-title {
+  padding: 1.75rem 1.25rem 1.5rem;
+}
+
+.sheet-grid {
+  display: grid;
+  border-top: 2px dashed var(--hairline);
+}
+
+.sheet-main {
+  padding: 1.5rem 1.25rem 2rem;
+}
+
+.sheet-side {
+  padding: 1.75rem 1.25rem;
+  border-top: 2px dashed var(--hairline);
+  background: var(--wash);
+}
+
+@media (min-width: 64rem) {
+  .sheet-head,
+  .sheet-title,
+  .sheet-main,
+  .sheet-side {
+    padding-inline: 2.75rem;
+  }
+
+  .sheet-title {
+    padding-block: 2.5rem 2rem;
+  }
+
+  .sheet-main,
+  .sheet-side {
+    padding-block: 2.25rem 2.75rem;
+  }
+
+  /* Home: the question, then the grade box. */
+  .sheet-grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  }
+
+  .sheet-grid > .sheet-side {
+    border-top: 0;
+    border-left: 2px dashed var(--hairline);
+  }
+
+  /* /assess: a short score column, then the list of every subject. */
+  .sheet-grid.assess {
+    grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+  }
+
+  .sheet-grid.assess > .sheet-side {
+    border-left: 0;
+    border-right: 2px dashed var(--hairline);
+  }
+
+  .sheet-side .sticky {
+    position: sticky;
+    top: 7rem;
+  }
+}
+
+/* The assess score column comes first in the markup, so it is the one with a
+   rule underneath on a phone. */
+.sheet-grid.assess > .sheet-side {
+  border-top: 0;
+  border-bottom: 2px dashed var(--hairline);
+}
+
+@media (min-width: 64rem) {
+  .sheet-grid.assess > .sheet-side {
+    border-bottom: 0;
+  }
+}
+
+h1 {
+  max-width: 24ch;
+  font-size: clamp(2.375rem, 5.6vw, 5rem);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.assess-title h1 {
+  font-size: clamp(2rem, 4.4vw, 3.5rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+/* The second clause of a headline, set in the action colour; the stream
+   surface's italic serif has no place on paper. */
+.display-italic,
+h1 .accent {
+  color: var(--accent);
+}
+
 .lead {
-  max-width: 27rem;
+  margin-top: 1rem;
+  max-width: 52ch;
   font-size: 1.0625rem;
-  line-height: 1.6;
+  line-height: 1.55;
   color: var(--muted-foreground);
 }
 
@@ -430,26 +380,51 @@ h1 {
   }
 }
 
+.kicker {
+  margin-bottom: 1rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Pages other than the two assessment sheets keep the plain hero. */
+.hero {
+  padding-block: clamp(2.5rem, 7vw, 5rem) clamp(2rem, 6vw, 4rem);
+}
+
 /* --- The score ---------------------------------------------------------- */
 
-.score {
-  margin-top: 2rem;
+.score-label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
 }
 
 .score-row {
   display: flex;
-  align-items: baseline;
-  gap: 1.25rem;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-top: 0.5rem;
 }
 
 .score-number {
-  font-size: clamp(3rem, 9vw, 8rem);
-  font-weight: 800;
-  line-height: 0.85;
-  letter-spacing: -0.04em;
+  display: inline-block;
+  font-size: clamp(3.5rem, 12vw, 10rem);
+  font-weight: 900;
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+}
+
+.assess .score-number {
+  font-size: clamp(3.5rem, 8vw, 6.5rem);
+  line-height: 0.82;
+  letter-spacing: -0.05em;
 }
 
 .score-of {
+  padding-bottom: 0.4rem;
   font-size: 1.0625rem;
   font-weight: 600;
   color: var(--muted-foreground);
@@ -463,26 +438,41 @@ h1 {
 }
 
 .score-ceiling {
-  margin-top: 0.75rem;
+  margin-top: 1rem;
   font-size: 1rem;
-  color: var(--warning);
+  font-weight: 600;
+  color: var(--verdict);
 }
 
+.score-carried {
+  margin-top: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.score-note {
+  margin-top: 1rem;
+  max-width: 40ch;
+  font-size: 1rem;
+  color: var(--muted-foreground);
+}
+
+/* The ledger: every subject on the sheet, each filling in as it is answered,
+   so the number is explainable rather than asserted. */
 .marks {
-  display: grid;
-  gap: 0.5rem;
-  margin-top: 1.25rem;
-  max-width: 27.5rem;
+  margin-top: 1.75rem;
   list-style: none;
+  border-top: 1px solid var(--hairline);
 }
 
-.marks li {
+.marks > li {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--glass-border);
+  padding-block: 0.75rem;
+  border-bottom: 1px solid var(--hairline);
   font-size: 1rem;
 }
 
@@ -499,56 +489,32 @@ h1 {
 
 .marks .earned {
   flex: none;
-  font-weight: 600;
-  color: var(--accent-bright);
+  font-weight: 700;
+  color: var(--accent);
 }
 
 .marks .earned[data-zero="true"] {
+  color: var(--verdict);
+}
+
+.marks .earned[data-open="true"] {
+  font-weight: 400;
   color: var(--muted-foreground);
 }
 
-/* --- Glass panel -------------------------------------------------------- */
-
-/* The tint is fixed rather than variable: every contrast ratio the app
-   measures is measured against this exact composite, and a panel whose
-   opacity varies is a panel whose contrast is unknown. */
-.panel {
-  position: relative;
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius);
-  background-image: linear-gradient(160deg, var(--glass-strong), var(--glass));
-  padding: 1rem;
+.marks > li.unanswered .subject {
+  font-weight: 400;
+  color: var(--muted-foreground);
 }
 
-@media (min-width: 40rem) {
-  .panel {
-    padding: 1.5rem;
-  }
+/* On /assess the open question is the row the reader has reached. */
+.marks > li.current {
+  display: block;
+  padding-block: 1.25rem;
 }
 
-@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-  .panel {
-    -webkit-backdrop-filter: blur(18px);
-    backdrop-filter: blur(18px);
-  }
-
-  /* Blur is fill rate, and fill rate is what a mid-range phone runs out of
-     first. Half the radius below the tablet breakpoint. */
-  @media (max-width: 47.9375rem) {
-    .panel {
-      -webkit-backdrop-filter: blur(9px);
-      backdrop-filter: blur(9px);
-    }
-  }
-}
-
-/* Where the property does not exist the panel becomes a solid surface rather
-   than a transparent hole with text floating in it. */
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .panel {
-    background-image: none;
-    background-color: var(--muted);
-  }
+.assess .marks {
+  margin-top: 0;
 }
 
 /* --- The question ------------------------------------------------------- */
@@ -561,30 +527,37 @@ h1 {
 
 .question-step {
   display: block;
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--accent-bright);
+  color: var(--accent);
 }
 
 .question-text {
   display: block;
-  margin-top: 0.625rem;
-  font-size: 1.1875rem;
-  font-weight: 600;
-  line-height: 1.3;
+  margin-top: 0.5rem;
+  font-size: 1.3125rem;
+  font-weight: 700;
+  line-height: 1.25;
 }
 
 @media (min-width: 40rem) {
   .question-text {
-    font-size: 1.3125rem;
+    font-size: 1.5rem;
   }
+}
+
+.question-ref {
+  margin-top: 0.375rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
 }
 
 .question-help {
   margin-top: 0.5rem;
-  max-width: 30rem;
+  max-width: 50ch;
   font-size: 1rem;
   color: var(--muted-foreground);
 }
@@ -592,22 +565,30 @@ h1 {
 .options {
   display: grid;
   gap: 0.5rem;
-  margin-top: 0.875rem;
+  margin-top: 1rem;
   list-style: none;
 }
 
-/* Every option is the same button. Styling one of four as the primary would
-   tell the reader which answer the page wants, on a page whose only value is
-   that the number is theirs. */
+@media (min-width: 40rem) {
+  .options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Every option is the same button: styling one of four as the primary would
+   tell the reader which answer the page wants. Hover changes only the border,
+   because a filled hover under the pointer after a tap read as an answer
+   already chosen. */
 .option {
   display: flex;
   align-items: center;
   width: 100%;
-  min-height: 3rem;
-  padding: 0.625rem 1rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: rgba(8, 8, 13, 0.4);
+  height: 100%;
+  min-height: 3.25rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--background);
   color: var(--foreground);
   font: inherit;
   font-size: 1rem;
@@ -615,19 +596,20 @@ h1 {
   line-height: 1.3;
   text-align: left;
   cursor: pointer;
-  transition:
-    border-color var(--motion-fast) ease,
-    background-color var(--motion-fast) ease;
+  transition: border-color var(--motion-fast) ease;
 }
 
-.option:hover {
-  border-color: var(--accent-bright);
-  background: rgba(8, 8, 13, 0.7);
+@media (hover: hover) {
+  .option:hover {
+    border-color: var(--foreground);
+  }
 }
 
 .step-back {
-  margin-top: 0.75rem;
+  display: inline-flex;
+  align-items: center;
   min-height: 2.75rem;
+  margin-top: 0.75rem;
   padding: 0;
   border: 0;
   background: none;
@@ -640,14 +622,58 @@ h1 {
   cursor: pointer;
 }
 
-.after-questions {
-  margin-top: 1.5rem;
-}
-
 .after-questions p {
-  max-width: 30rem;
+  max-width: 52ch;
   font-size: 1.0625rem;
   line-height: 1.55;
+}
+
+.after-questions .actions {
+  margin-top: 1.25rem;
+}
+
+/* On /assess the finished state closes the column as its own boxed result,
+   below the marking note, as the app's does. */
+.assess .after-questions {
+  margin-top: 2.5rem;
+  padding: 1.5rem;
+  border: 2px solid var(--rule);
+  border-radius: var(--radius);
+}
+
+@media (min-width: 40rem) {
+  .assess .after-questions {
+    padding: 2rem;
+  }
+}
+
+.after-questions h2 {
+  font-size: clamp(1.6rem, 3vw, 2.25rem);
+}
+
+.after-questions h2 + p,
+.after-questions p + p {
+  margin-top: 1rem;
+}
+
+.after-questions .marks {
+  margin-top: 1.25rem;
+}
+
+.after-questions .marks li > span {
+  max-width: 56ch;
+}
+
+.after-questions h2:not(:first-child) {
+  margin-top: 2.5rem;
+}
+
+.marking-note {
+  margin-top: 1.25rem;
+  max-width: 52ch;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--muted-foreground);
 }
 
 /* --- Buttons ------------------------------------------------------------ */
@@ -655,24 +681,24 @@ h1 {
 .actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
   align-items: center;
-  margin-top: 1.5rem;
+  gap: 0.75rem;
+  margin-top: 2rem;
 }
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  min-height: 3.375rem;
-  padding: 0 1.75rem;
-  border: 1px solid transparent;
-  border-radius: 999px;
+  min-height: 3rem;
+  padding: 0 1.5rem;
+  border: 2px solid var(--foreground);
+  border-radius: var(--radius);
   font: inherit;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   text-decoration: none;
+  white-space: nowrap;
   cursor: pointer;
   transition:
     background-color var(--motion-fast) ease,
@@ -680,41 +706,45 @@ h1 {
 }
 
 .btn-primary {
-  background: var(--brand);
-  color: var(--brand-foreground);
-  box-shadow: 0 8px 34px var(--brand-glow);
+  background: var(--foreground);
+  color: var(--background);
 }
 
 .btn-primary:hover {
-  background: var(--primary-dark);
+  background: var(--accent);
+  border-color: var(--accent);
 }
 
 .btn-secondary {
-  border-color: var(--border);
+  background: var(--background);
   color: var(--foreground);
-  background: none;
 }
 
 .btn-secondary:hover {
-  border-color: var(--accent-bright);
+  background: var(--wash);
+}
+
+.masthead .btn {
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  font-size: 0.9375rem;
 }
 
 /* --- Capability rows ---------------------------------------------------- */
 
-/* Rows on a rule, not a grid of equal cards. The card grid is a named
-   fail-on-sight pattern in this project's brief, and a list is the honest form
-   for a catalogue of what the product does. */
+/* Rows on a rule, not a grid of equal cards: a list is the honest form for a
+   catalogue of what the product does. */
 .rows {
   list-style: none;
   margin-top: 2.5rem;
-  border-top: 1px solid var(--glass-border);
+  border-top: 2px solid var(--rule);
 }
 
 .rows > li {
   display: grid;
   gap: 0.375rem 2.5rem;
   padding-block: 1.5rem;
-  border-bottom: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--hairline);
 }
 
 @media (min-width: 48rem) {
@@ -739,91 +769,59 @@ h1 {
 
 .row-marks {
   font-size: 1rem;
-  font-weight: 600;
-  color: var(--accent-bright);
+  font-weight: 700;
+  color: var(--accent);
   white-space: nowrap;
 }
 
 /* --- Conditions --------------------------------------------------------- */
 
-/* A disclosure list, so the law text is in the markup and the section is
-   complete with JavaScript off. The script only keeps the tally. */
+/* An open list: the Act's name for each condition with its plain meaning
+   beside it, readable without a click. A disclosure list hid the plain words
+   behind the statute names, and a grade held the section at C for it. */
 .conditions {
   list-style: none;
   margin-top: 2.5rem;
-  border-top: 1px solid var(--glass-border);
+  border-top: 2px solid var(--rule);
 }
 
 .conditions > li {
-  border-bottom: 1px solid var(--glass-border);
-}
-
-.conditions details {
-  padding-block: 1.125rem;
-}
-
-.conditions summary {
   display: flex;
   align-items: baseline;
   gap: 1rem;
-  min-height: 2.75rem;
-  cursor: pointer;
-  font-size: 1.0625rem;
-  font-weight: 600;
-  list-style: none;
-}
-
-.conditions summary::-webkit-details-marker {
-  display: none;
-}
-
-.conditions summary::after {
-  content: "";
-  margin-left: auto;
-  align-self: center;
-  width: 0.625rem;
-  height: 0.625rem;
-  border-right: 2px solid var(--muted-foreground);
-  border-bottom: 2px solid var(--muted-foreground);
-  transform: rotate(45deg) translate(-2px, -2px);
-  transition: transform var(--motion-base) var(--ease-stream);
-  flex: none;
-}
-
-.conditions details[open] summary::after {
-  transform: rotate(225deg) translate(-2px, -2px);
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--hairline);
 }
 
 .conditions .num {
   flex: none;
   width: 1.75rem;
-  font-family: var(--display);
-  font-size: 1.25rem;
-  color: var(--accent-bright);
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--accent);
 }
 
-.conditions p {
+.conditions .cond-name {
+  display: block;
+  font-size: 1.0625rem;
+  font-weight: 700;
+}
+
+.conditions .cond-detail {
+  display: block;
   max-width: 33rem;
-  margin-top: 0.625rem;
+  margin-top: 0.25rem;
   font-size: 1rem;
   line-height: 1.6;
   color: var(--muted-foreground);
 }
 
-@media (min-width: 40rem) {
-  .conditions p {
-    padding-left: 2.75rem;
-  }
-}
-
-.tally {
-  margin-top: 1.25rem;
-  font-size: 1rem;
+.conditions .cond-act {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
   color: var(--muted-foreground);
-}
-
-.tally strong {
-  color: var(--accent-bright);
 }
 
 /* --- Section headings --------------------------------------------------- */
@@ -833,16 +831,16 @@ h1 {
 }
 
 h2 {
-  max-width: 16em;
+  max-width: 18em;
   font-size: clamp(1.75rem, 4vw, 2.75rem);
   font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.025em;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
 }
 
 .section-head p {
   margin-top: 1rem;
-  max-width: 29rem;
+  max-width: 33rem;
   font-size: 1.0625rem;
   line-height: 1.6;
   color: var(--muted-foreground);
@@ -850,17 +848,9 @@ h2 {
 
 /* --- Close -------------------------------------------------------------- */
 
-.close-scene {
-  text-align: left;
-}
-
-.close-scene h2 {
-  max-width: 16em;
-}
-
 .close-scene p {
   margin-top: 1rem;
-  max-width: 30rem;
+  max-width: 33rem;
   font-size: 1.0625rem;
   line-height: 1.6;
   color: var(--muted-foreground);
@@ -875,24 +865,20 @@ h2 {
 /* --- Footer ------------------------------------------------------------- */
 
 footer {
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-  border-top: 1px solid var(--glass-border);
-  padding: 4rem var(--gutter) 3rem;
+  border-top: 2px solid var(--rule);
+  padding: 3.5rem var(--gutter) 3rem;
 }
 
 .footer-grid {
   display: grid;
   gap: 3rem;
-  max-width: 78rem;
+  max-width: 72.5rem;
   margin: 0 auto;
 }
 
-/* The identity block holds the registration number, which is one long
-   unbreakable token. In a quarter-width column at 1024 it wrapped to three
-   lines of 43 characters, under the 45-character floor, so it keeps the full
-   width until there is room for four columns. */
+/* The identity block holds the registration number, one long unbreakable
+   token; it keeps the full width until there is room for four columns, or it
+   wraps under the 45-character floor at 1024. */
 @media (min-width: 48rem) {
   .footer-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -915,16 +901,16 @@ footer {
 
 .footer-about {
   margin-top: 0.75rem;
-  max-width: 24rem;
+  max-width: 26rem;
   font-size: 1rem;
   line-height: 1.6;
   color: var(--muted-foreground);
 }
 
 footer h2 {
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted-foreground);
 }
@@ -937,215 +923,89 @@ footer nav ul {
 }
 
 footer nav a {
-  position: relative;
   display: inline-flex;
   align-items: center;
   min-height: 2.75rem;
   color: var(--foreground);
-  font-size: 0.9375rem;
+  font-size: 1rem;
   font-weight: 500;
+  text-underline-offset: 6px;
   text-decoration: none;
 }
 
-footer nav a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0.65rem;
-  width: 100%;
-  height: 1px;
-  background: var(--accent-bright);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 350ms var(--ease-stream);
+footer nav a:hover {
+  text-decoration: underline;
 }
 
-footer nav a:hover::after,
-footer nav a:focus-visible::after {
-  transform: scaleX(1);
-}
-
+/* A reading measure, left-aligned with the footer grid above it (whose own
+   width is 72.5rem, centred). */
 .footer-note {
-  max-width: 26rem;
-  margin-top: 2.5rem;
+  max-width: 33rem;
+  margin: 2.5rem 0 0 max(0px, calc((100% - 72.5rem) / 2));
   font-size: 1rem;
   line-height: 1.6;
   color: var(--muted-foreground);
 }
 
-.watermark {
-  position: absolute;
-  left: 50%;
-  bottom: -0.24em;
-  transform: translateX(-50%);
-  font-size: clamp(90px, 16.5vw, 270px);
-  font-weight: 800;
-  line-height: 1;
-  white-space: nowrap;
-  pointer-events: none;
-  user-select: none;
-  color: transparent;
-  -webkit-text-stroke: 1px var(--watermark-ink);
-  transition: -webkit-text-stroke-color 600ms;
+/* --- Motion ------------------------------------------------------------- */
+
+/* The page's one orchestrated moment, made of the product: the sheet settles
+   and its grade box slides in on load, then every answer ticks the score and
+   inks its ledger row. The resting state of each rule is the static page, so
+   with JavaScript off or reduced motion nothing is held back. The headline
+   never starts transparent: it is the LCP element. */
+html[data-motion="on"] .sheet {
+  animation: settle 700ms var(--ease) both;
 }
 
-footer:hover .watermark {
-  -webkit-text-stroke-color: var(--watermark-hover);
+html[data-motion="on"] .sheet-title {
+  animation: settle var(--motion-slow) var(--ease) 80ms both;
 }
 
-/* --- Motion toggle ------------------------------------------------------ */
-
-.motion-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.625rem;
-  min-height: 2.75rem;
-  margin-top: 3rem;
-  padding: 0 1rem;
-  border: 1px solid var(--glass-border);
-  border-radius: 999px;
-  background: none;
-  color: var(--foreground);
-  font: inherit;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  cursor: pointer;
+html[data-motion="on"] .sheet-side > * {
+  animation: slide var(--motion-slow) var(--ease) 260ms both;
 }
 
-.motion-toggle:hover {
-  border-color: var(--accent-bright);
+html[data-motion="on"] .score-number.tick {
+  animation: tick 520ms var(--ease) both;
 }
 
-.motion-toggle .dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 999px;
-  background: var(--muted-foreground);
+html[data-motion="on"] .marks > li.ink {
+  animation: ink 600ms var(--ease) both;
 }
 
-html[data-motion="on"] .motion-toggle .dot {
-  background: var(--success);
-  box-shadow: 0 0 8px var(--success);
-}
-
-/* A control that does nothing when pressed is worse than no control, so it is
-   absent until the script confirms it can honour it. */
-html:not(.js) .motion-toggle,
-html:not(.js) /* Louder, by PJ's ruling of 2026-09-16, and still below the question so it
-   never stands between a reader and the first answer.
-   
-   It exists because honouring the operating system is right and invisible: a
-   reader whose desktop asks for less motion gets a still page and no idea
-   there is anything else. The page says so once, and the choice sticks. */
-.motion-offer {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.875rem;
-  margin-top: 1.5rem;
-  padding: 1rem 1.25rem;
-  border: 1px solid var(--glass-border);
-  border-left: 2px solid var(--accent-bright);
-  border-radius: var(--radius-sm);
-  background: var(--brand-soft);
-  font-size: 1rem;
-  line-height: 1.5;
-  color: var(--foreground);
-}
-
-.motion-offer button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 2.75rem;
-  padding: 0 1.125rem;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: none;
-  color: var(--foreground);
-  font: inherit;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: border-color var(--motion-fast) ease;
-}
-
-.motion-offer button:hover {
-  border-color: var(--accent-bright);
-}
-
-.motion-offer button svg {
-  width: 1rem;
-  height: 1rem;
-  flex: none;
-  fill: var(--accent-bright);
-}
-
-/* --- The scroll cue ----------------------------------------------------- */
-
-.cue {
-  display: none;
-}
-
-@media (min-width: 64rem) {
-  .cue {
-    display: flex;
-    align-items: center;
-    gap: 0.875rem;
-    margin-top: 3rem;
-    font-size: 0.9375rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted-foreground);
+@keyframes settle {
+  from {
+    transform: translate3d(0, 18px, 0);
   }
 }
 
-.cue-wire {
-  position: relative;
-  width: 1px;
-  height: 44px;
-  overflow: hidden;
-  background: var(--wire);
-  flex: none;
-}
-
-.cue-wire::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--accent-bright);
-}
-
-html[data-motion="on"] .cue-wire::after {
-  top: -50%;
-  height: 50%;
-  animation: cue-drop 1.8s ease-in-out infinite;
-}
-
-@keyframes cue-drop {
-  0% {
-    top: -50%;
-  }
-  70%,
-  100% {
-    top: 110%;
+@keyframes slide {
+  from {
+    transform: translate3d(24px, 0, 0);
   }
 }
 
-/* --- Entrances ---------------------------------------------------------- */
+@keyframes tick {
+  from {
+    opacity: 0.35;
+    transform: translate3d(0, 0.14em, 0) scale(0.94);
+  }
+}
+
+@keyframes ink {
+  from {
+    opacity: 0.2;
+    transform: translate3d(-10px, 0, 0);
+  }
+}
 
 /* Every entrance starts from its finished state in the markup and is only
-   moved once the script has confirmed it can move it back. A reveal that
-   starts hidden in CSS is a page that is blank when JavaScript fails. */
-
+   moved once the script has confirmed it can move it back. */
 [data-reveal] {
   transition:
-    opacity var(--motion-slow) var(--ease-stream),
-    transform var(--motion-slow) var(--ease-stream);
+    opacity var(--motion-slow) var(--ease),
+    transform var(--motion-slow) var(--ease);
 }
 
 [data-reveal="out"] {
@@ -1158,53 +1018,9 @@ html[data-motion="on"] .cue-wire::after {
   transform: none;
 }
 
-/* A headline's lines rise out of their own clipped box, which is what makes it
-   read as type being set rather than as a block fading in. */
-.line-clip {
-  display: block;
-  overflow: hidden;
-  padding-bottom: 0.06em;
-}
-
-.line {
-  display: block;
-}
-
-html[data-motion="on"] .line {
-  animation: line-rise 1100ms var(--ease-stream) both;
-}
-
-html[data-motion="on"] .line-clip:nth-child(2) .line {
-  animation-delay: 110ms;
-}
-
-@keyframes line-rise {
-  from {
-    transform: translate3d(0, 112%, 0);
-  }
-  to {
-    transform: none;
-  }
-}
-
-html[data-motion="on"] [data-enter="load"] {
-  animation: arrive var(--motion-slow) var(--ease-stream) both;
-}
-
-@keyframes arrive {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 20px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-/* The last defence. Everything above is already gated on the reader's own
-   preference through the data-motion attribute; this catches anything that
-   ships without asking. */
+/* The last defence: everything above is gated on data-motion, which follows
+   the reader's own preference; this catches anything that ships without
+   asking. */
 @media (prefers-reduced-motion: reduce) {
   html:not([data-motion="on"]) *,
   html:not([data-motion="on"]) *::before,
@@ -1225,6 +1041,7 @@ html[data-motion="on"] [data-enter="load"] {
 .article h1 {
   max-width: 18em;
   font-size: clamp(1.9rem, 4.4vw, 3rem);
+  line-height: 1.05;
 }
 
 .article-meta {
@@ -1243,19 +1060,17 @@ html[data-motion="on"] [data-enter="load"] {
 
 .tag {
   padding: 0.25rem 0.75rem;
-  border: 1px solid var(--glass-border);
-  border-radius: 999px;
-  background: var(--brand-soft);
-  color: var(--brand-text);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  background: var(--wash);
+  color: var(--foreground);
   font-size: 0.875rem;
   font-weight: 600;
 }
 
-/* Hyphenated on a phone, and only on a phone. A 390px screen holds about 47
-   characters of 16px text, and unhyphenated prose containing words like
-   "Regulator" and "confirmation" wraps at 42, under the 45-character floor.
-   Letting the browser break a long word is what a typesetter does with a
-   narrow measure; above 40rem there is room and the rag is left alone. */
+/* Hyphenated on a phone, and only on a phone: a 390px screen holds about 47
+   characters of 16px text, and unhyphenated prose with words like "Regulator"
+   wraps at 42, under the 45-character floor. */
 .prose {
   margin-top: 2.5rem;
   font-size: 1rem;
@@ -1274,7 +1089,7 @@ html[data-motion="on"] [data-enter="load"] {
 .prose h2 {
   margin: 2.75rem 0 1rem;
   font-size: clamp(1.4rem, 3vw, 1.75rem);
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: -0.02em;
 }
 
@@ -1306,7 +1121,7 @@ html[data-motion="on"] [data-enter="load"] {
 }
 
 .prose a {
-  color: var(--brand-text);
+  color: var(--accent);
 }
 
 .prose :is(p, li, div, dd) > a:only-child {
@@ -1321,6 +1136,7 @@ html[data-motion="on"] [data-enter="load"] {
 
 .prose section {
   margin-bottom: 2rem;
+  padding-block: 0;
 }
 
 .prose table {
@@ -1333,13 +1149,30 @@ html[data-motion="on"] [data-enter="load"] {
 .prose th,
 .prose td {
   padding: 0.625rem 0.75rem;
-  border: 1px solid var(--glass-border);
+  border: 1px solid var(--hairline);
   text-align: left;
   vertical-align: top;
 }
 
 .prose th {
   font-weight: 700;
+  background: var(--wash);
+}
+
+/* The interim site's own notice, at the top of the product's privacy policy. */
+.prose .site-notice {
+  margin: 2rem 0 2.5rem;
+  padding: 1.25rem 1.5rem;
+  border-left: 2px solid var(--accent);
+  background: var(--wash);
+}
+
+.prose .site-notice h2 {
+  margin-top: 0;
+}
+
+.prose .site-notice ul {
+  margin-bottom: 0;
 }
 
 /* --- Post list ---------------------------------------------------------- */
@@ -1347,18 +1180,17 @@ html[data-motion="on"] [data-enter="load"] {
 .post-list {
   list-style: none;
   margin-top: 2.5rem;
-  border-top: 1px solid var(--glass-border);
+  border-top: 2px solid var(--rule);
 }
 
 .post-list > li {
-  border-bottom: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--hairline);
 }
 
 .post-list a {
   display: grid;
   gap: 0.5rem;
-  /* Half the 8px WCAG 2.5.8 asks between adjacent targets, top and bottom, so
-     two rows of the list are never a pixel apart. */
+  /* Half the 8px WCAG 2.5.8 asks between adjacent targets, top and bottom. */
   margin-block: 0.25rem;
   padding-block: 1.5rem;
   color: var(--foreground);
@@ -1380,7 +1212,9 @@ html[data-motion="on"] [data-enter="load"] {
 }
 
 .post-list a:hover h2 {
-  color: var(--accent-bright);
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 .post-list p {
@@ -1395,8 +1229,8 @@ html[data-motion="on"] [data-enter="load"] {
   max-width: 26rem;
   margin-top: 1.5rem;
   padding: 1rem 1.25rem;
-  border-left: 2px solid var(--accent-bright);
-  background: var(--brand-soft);
+  border-left: 2px solid var(--accent);
+  background: var(--wash);
   font-size: 1rem;
   line-height: 1.6;
   color: var(--foreground);

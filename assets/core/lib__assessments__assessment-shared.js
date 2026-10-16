@@ -6,14 +6,14 @@ export function getQuestionsForType(type) {
     return type === "gap_analysis" ? gapAnalysisQuestions : assessmentQuestions;
 }
 export const assessmentSections = [
-    { id: "governance", label: "Governance & Accountability" },
-    { id: "lawful_processing", label: "Lawful Processing (Conditions 1-5)" },
-    { id: "transparency", label: "Transparency & Data Subject Rights" },
-    { id: "security", label: "Security & Retention" },
-    { id: "third_parties", label: "Third Parties & Cross-border" },
-    { id: "consent", label: "Consent & Marketing" },
-    { id: "special_information", label: "Special Personal Information" },
-    { id: "documentation", label: "Documentation & Records" },
+    { id: "governance", label: "Who is responsible" },
+    { id: "lawful_processing", label: "Why and how you use information" },
+    { id: "transparency", label: "Telling people, and their rights" },
+    { id: "security", label: "Keeping it safe, and for how long" },
+    { id: "third_parties", label: "Suppliers, and information sent abroad" },
+    { id: "consent", label: "Consent and marketing" },
+    { id: "special_information", label: "Sensitive information and children" },
+    { id: "documentation", label: "Keeping records" },
 ];
 export function calculateAssessmentScore(answers, questions) {
     const qs = questions ?? assessmentQuestions;
@@ -31,8 +31,9 @@ export function calculateAssessmentScore(answers, questions) {
         return 0;
     return Math.round((weightedSum / maxWeightedSum) * 100);
 }
+export const LOW_RISK_FROM = 76;
 export function getRiskLevel(score) {
-    if (score >= 76)
+    if (score >= LOW_RISK_FROM)
         return "low";
     if (score >= 51)
         return "medium";
@@ -51,26 +52,19 @@ export function generateRecommendations(answers, questions) {
         const ratio = answerValue / maxValue;
         if (ratio >= 1)
             continue;
-        let priority;
-        if (ratio <= 0.33) {
-            priority = "high";
-        }
-        else if (ratio <= 0.66) {
-            priority = "medium";
-        }
-        else {
-            priority = "low";
-        }
+        const level = ratio < 0.5 ? "low" : "medium";
+        const priority = level === "low" ? "high" : "medium";
         recommendations.push({
             questionId: question.id,
             section: question.section,
-            text: question.recommendation[priority],
+            text: question.recommendation[level],
             priority,
             popiaReference: question.popiaReference,
         });
     }
+    const answered = (rec) => answers[rec.questionId] ?? 0;
     return recommendations.sort((a, b) => {
         const order = { high: 0, medium: 1, low: 2 };
-        return order[a.priority] - order[b.priority];
+        return order[a.priority] - order[b.priority] || answered(a) - answered(b);
     });
 }

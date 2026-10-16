@@ -18,7 +18,7 @@
     <meta name="twitter:title" content="Free POPIA readiness assessment" />
     <meta name="twitter:description" content="Answer 25 questions across the areas POPIA covers and see your readiness score out of 100. Free, no account, nothing sent anywhere." />
     <meta name="twitter:image" content="https://popiadesk.co.za/assets/og.png" />
-    <meta name="theme-color" content="#08080d" />
+    <meta name="theme-color" content="#ffffff" />
     <link rel="icon" href="/assets/icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/assets/icon-192.png" />
     <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/schibsted-grotesk-400-900-normal.woff2" crossorigin />
@@ -32,66 +32,168 @@
   </head>
   <body>
     <a class="skip" href="#content">Skip to content</a>
-    <canvas id="field" aria-hidden="true"></canvas>
-    <div class="grain" aria-hidden="true"></div>
     <div class="page">
     <header class="masthead">
-      <a class="brandmark" href="/"><svg viewBox="0 0 33 18" aria-hidden="true" fill="none"><path d="M0 0h5v18H0zM7 0h5v18H7zM14 0h5v18h-5z" fill="var(--accent-bright)" /><path d="M21 0h5v18h-5zM22.2 1.2h2.6v15.6h-2.6zM28 0h5v18h-5zM29.2 1.2h2.6v15.6h-2.6z" fill="var(--foreground)" fill-rule="evenodd" /></svg> POPIAdesk</a>
-      <a class="btn btn-secondary" href="mailto:hello@popiadesk.co.za?subject=Tell%20me%20when%20POPIAdesk%20opens"><span>Get a note<span class="on-wide"> when it opens</span></span></a>
+      <div class="masthead-row">
+        <a class="brandmark" href="/"><svg viewBox="0 0 33 18" aria-hidden="true" fill="none"><path d="M0 0h5v18H0zM7 0h5v18H7zM14 0h5v18h-5z" fill="var(--accent)" /><path d="M21 0h5v18h-5zM22.2 1.2h2.6v15.6h-2.6zM28 0h5v18h-5zM29.2 1.2h2.6v15.6h-2.6z" fill="var(--foreground)" fill-rule="evenodd" /></svg> POPIAdesk</a>
+        <a class="btn btn-secondary" href="mailto:hello@popiadesk.co.za?subject=Tell%20me%20when%20POPIAdesk%20opens"><span>Email us<span class="on-wide"> to hear when it opens</span></span></a>
+      </div>
     </header>
       <main id="content">
-        <section class="wrap hero">
-          <p class="kicker" data-reveal data-enter="load">Readiness assessment</p>
-          <h1 data-lines>
-            <span class="line-clip"><span class="line">Where your business stands on POPIA,</span></span>
-            <span class="line-clip"><span class="line display-italic">in 25 questions.</span></span>
-          </h1>
-          <div class="hero-grid">
-            <div>
-              <p class="lead" data-reveal data-enter="load">
-                For South African businesses. Free, and your answers stay in
-                your browser.
-              </p>
-<div class="score" data-score>
-            <div class="score-row">
-              <span class="score-number tabular" data-score-number aria-hidden="true">0</span>
-              <span class="score-of">
-                of 100
-                <span data-score-remaining>25 questions to go</span>
-              </span>
-            </div>
-            <p class="sr-only" role="status" aria-live="polite" data-score-announce>
-              Your POPIA readiness score is 0 out of 100, from 0 of 25 questions.
-            </p>
-            <p class="score-ceiling" data-ceiling hidden></p>
-            <ul class="marks" data-marks></ul>
+        <section class="sheet assess" aria-labelledby="assess-title">
+          <div class="sheet-head">
+            <span>POPIA readiness report</span>
+            <span class="accent">Free, nothing sent</span>
           </div>
+          <div class="sheet-title assess-title">
+            <h1 id="assess-title">Where your business stands on POPIA, <span class="accent">in 25 questions.</span></h1>
+          </div>
+          <div class="sheet-grid assess">
+            <section class="sheet-side" aria-label="Your POPIA readiness report">
+<div class="sticky" data-score>
+              <p class="score-label">Your score</p>
+              <div class="score-row">
+                <span class="score-number tabular" data-score-number aria-hidden="true">0</span>
+                <span class="score-of">
+                  of 100
+                  <span data-score-remaining>25 to answer</span>
+                </span>
+              </div>
+              <p class="sr-only" role="status" aria-live="polite" data-score-announce>
+                Your POPIA readiness score is 0 out of 100, from 0 of 25 questions.
+              </p>
+              <p class="score-ceiling" data-ceiling hidden></p>
+              <p class="score-carried" data-carried hidden></p>
             </div>
-            <div>
-              <div class="panel question-card" data-question-card data-full-assessment>
-<fieldset data-question="q11">
+            </section>
+            <div class="sheet-main">
+              <ol class="marks" data-marks aria-label="All 25 subjects">
+                <li class="current">
+                  <div class="question-card" data-question-card data-full-assessment>
+<fieldset data-question="q1">
               <legend class="contents">
                 <span class="question-step">Question 1 of 25</span>
-                <span class="question-text">Does your organisation have a privacy policy / notice?</span>
+                <span class="question-ref">Area: Who is responsible</span>
+                <span class="question-text">Has your business named its Information Officer?</span>
               </legend>
-              <p class="question-help">Data subjects must be informed about how their information is processed.</p>
-              <ul class="options" data-options>
-                <li><button type="button" class="option" data-value="3">Yes, published and easily accessible</button></li>
-                <li><button type="button" class="option" data-value="2">Yes, but not easily accessible</button></li>
-                <li><button type="button" class="option" data-value="1">In development</button></li>
+              <p class="question-help">By default the head of the business, who must be registered with the Regulator.</p>
+              <ul class="options" data-options data-needs-js>
+                <li><button type="button" class="option" data-value="3">Yes, and registered with the Information Regulator</button></li>
+                <li><button type="button" class="option" data-value="2">Yes, but not registered yet</button></li>
+                <li><button type="button" class="option" data-value="1">We are working on it</button></li>
                 <li><button type="button" class="option" data-value="0">No</button></li>
               </ul>
               <noscript>
                 <p class="question-help">
                   The score is worked out in your browser, so answering needs
-                  JavaScript. The guides below cover the same ground in full.
+                  JavaScript. The guides explain several of the subjects in more depth.
                 </p>
               </noscript>
             </fieldset>
-              </div>
-              <p class="motion-offer" data-motion-offer hidden>
-                <span>Your device asks for less motion, so this page is holding still.</span>
-                <button type="button" data-motion-show><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3" /></svg> Show me the motion</button>
+                  </div>
+                </li>
+              <li class="unanswered">
+                <span><span class="subject">Compliance framework</span></span>
+                <span class="earned" data-open="true">up to 5</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Data protection budget</span></span>
+                <span class="earned" data-open="true">up to 3.3</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Impact assessment</span></span>
+                <span class="earned" data-open="true">up to 3.3</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Breach response plan</span></span>
+                <span class="earned" data-open="true">up to 5</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Reason for using data</span></span>
+                <span class="earned" data-open="true">up to 5</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Collecting directly</span></span>
+                <span class="earned" data-open="true">up to 3.3</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Purpose explained</span></span>
+                <span class="earned" data-open="true">up to 5</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Only what you need</span></span>
+                <span class="earned" data-open="true">up to 3.3</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Keeping records accurate</span></span>
+                <span class="earned" data-open="true">up to 3.3</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Privacy policy</span></span>
+                <span class="earned" data-open="true">up to 5</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Telling people at the time</span></span>
+                <span class="earned" data-open="true">up to 3.3</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Access and correction</span></span>
+                <span class="earned" data-open="true">up to 5</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Security measures</span></span>
+                <span class="earned" data-open="true">up to 5</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Retention policy</span></span>
+                <span class="earned" data-open="true">up to 3.3</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Staff training</span></span>
+                <span class="earned" data-open="true">up to 3.3</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Who can see what</span></span>
+                <span class="earned" data-open="true">up to 3.3</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Supplier agreements</span></span>
+                <span class="earned" data-open="true">up to 5</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Checking your suppliers</span></span>
+                <span class="earned" data-open="true">up to 3.3</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Sending data abroad</span></span>
+                <span class="earned" data-open="true">up to 3.3</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Consent</span></span>
+                <span class="earned" data-open="true">up to 5</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Marketing opt-in</span></span>
+                <span class="earned" data-open="true">up to 3.3</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Sensitive information</span></span>
+                <span class="earned" data-open="true">up to 3.3</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Children's information</span></span>
+                <span class="earned" data-open="true">up to 1.7</span>
+              </li>
+              <li class="unanswered">
+                <span><span class="subject">Records of processing</span></span>
+                <span class="earned" data-open="true">up to 5</span>
+              </li>
+              </ol>
+              <p class="marking-note">
+                Marked out of 100 across 25 subjects, each carrying the
+                marks shown. The weights are ours, not the Information Regulator's. Marks
+                are rounded, so they may not add up exactly. Your answers stay in this
+                browser.
               </p>
             </div>
           </div>
@@ -101,8 +203,8 @@
           <div class="section-head">
             <h2 id="where-from" data-reveal>Where each question comes from</h2>
             <p data-reveal>
-              Every question cites the section of the Act behind it. The guides
-              below cover the same ground in full.
+              Every question cites the section of the Act behind it. These guides
+              go into more depth on several of the subjects.
             </p>
           </div>
           <div class="actions">
@@ -113,16 +215,12 @@
         </section>
       </main>
     <footer>
-      <span class="watermark" aria-hidden="true">POPIAdesk</span>
       <div class="footer-grid">
         <div class="footer-identity">
-          <a class="brandmark" href="/"><svg viewBox="0 0 33 18" aria-hidden="true" fill="none"><path d="M0 0h5v18H0zM7 0h5v18H7zM14 0h5v18h-5z" fill="var(--accent-bright)" /><path d="M21 0h5v18h-5zM22.2 1.2h2.6v15.6h-2.6zM28 0h5v18h-5zM29.2 1.2h2.6v15.6h-2.6z" fill="var(--foreground)" fill-rule="evenodd" /></svg> POPIAdesk</a>
+          <a class="brandmark" href="/"><svg viewBox="0 0 33 18" aria-hidden="true" fill="none"><path d="M0 0h5v18H0zM7 0h5v18H7zM14 0h5v18h-5z" fill="var(--accent)" /><path d="M21 0h5v18h-5zM22.2 1.2h2.6v15.6h-2.6zM28 0h5v18h-5zM29.2 1.2h2.6v15.6h-2.6z" fill="var(--foreground)" fill-rule="evenodd" /></svg> POPIAdesk</a>
           <p class="footer-about">POPIA compliance software for South African businesses.</p>
           <p class="footer-about">Operated by Lightfast Digital (Pty) Ltd, registration 2026/652553/07.</p>
           <p class="footer-about">Bellville, Western Cape.</p>
-          <button type="button" class="motion-toggle" data-motion-toggle aria-pressed="false">
-            <span class="dot" aria-hidden="true"></span> Motion off
-          </button>
         </div>
         <nav aria-label="On this site">
           <h2>On this site</h2>

@@ -1,20 +1,23 @@
 /* The interim site's behaviour.
  *
- * The rule this file obeys: no arithmetic here that the product already owns.
- * The score, the risk bands, the questions, the particle physics, the mark's
- * geometry and the counting curve are all imported from modules emitted out of
- * src/ by tools/build.mjs. What is left is the DOM, which is genuinely this
- * site's own: a static page has no React to hand.
+ * The rule this file obeys: no arithmetic or verdict here that the product
+ * already owns. The score, the ceiling, the advice, the zeros rule, the risk
+ * sentences, the questions and the counting curve are imported from modules
+ * emitted out of src/ by tools/build.mjs. What is left is the DOM, which is
+ * genuinely this site's own: a static page has no React to hand.
  *
  * Everything degrades. The markup ships finished, so with JavaScript off the
  * reader gets the page, the first question (unanswerable, and the page says
- * so), the eight conditions with their text, and every link. With motion off
- * the field paints one still frame and nothing loops.
+ * so), the ledger, the eight conditions with their text, and every link. With
+ * reduced motion nothing animates and the score is set rather than counted.
  */
 
 import {
   assessmentQuestions,
+  assessmentSections,
   calculateAssessmentScore,
+  generateRecommendations,
+  getRiskLevel,
 } from "./core/lib__assessments__assessment-shared.js";
 import {
   answerLabel,
@@ -24,28 +27,17 @@ import {
   questionById,
   trimMark,
 } from "./core/lib__assessments__sheet-scoring-core.js";
-import { subjectLabel } from "./core/lib__assessments__subject-labels.js";
+import {
+  riskSentenceFor,
+  subjectLabel,
+  zeroDutiesSentence,
+} from "./core/lib__assessments__subject-labels.js";
 import {
   parseHeroAnswers,
   sanitiseHeroAnswers,
   serialiseHeroAnswers,
 } from "./core/lib__assessments__hero-handoff-core.js";
 import { countedValue, COUNT_DURATION_MS } from "./core/lib__motion__count-core.js";
-import {
-  arrivalWeights,
-  RESTING_WEIGHTS,
-  smoothScroll,
-} from "./core/lib__motion__stream-core.js";
-import {
-  createRandom,
-  fieldStroke,
-  particleCount,
-  sampleMarkPoints,
-  seedParticles,
-  stepField,
-  POINTER_AWAY,
-} from "./core/lib__motion__particles-core.js";
-import { MARK_PATHS, MARK_VIEWBOX } from "./core/components__stream__mark.js";
 
 const root = document.documentElement;
 const TOTAL = assessmentQuestions.length;
@@ -55,14 +47,21 @@ const TOTAL = assessmentQuestions.length;
    twenty-five and the most likely early yes. */
 const HERO_QUESTION_IDS = ["q11", "q1", "q2"];
 
-/* Help only where the term is not common knowledge, which is the same pair the
-   product's own hero glosses. Every word here is read before the reader can
-   act, and the budget before the primary action is sixty: q11 asks about a
-   privacy policy, which this audience already understands. */
+/* Help only where the term is not common knowledge, the same pair the
+   product's own hero glosses: every word here is read before the reader can
+   act, and the budget before the primary action is sixty. */
 const HERO_HELP = new Set(["q1", "q2"]);
+
+/* What each unanswered row on the front page is about, in the owner's words,
+   until it is answered. The same lines as the app's hero ledger. */
+const LEDGER_GLOSS = {
+  q11: "A notice telling people what you collect and why",
+  q1: "Who answers for privacy in your business",
+  q2: "A written plan for how you meet POPIA",
+};
+
 const HANDOFF_KEY = "popiadesk-hero-answers";
 const SAVED_KEY = "popiadesk.assessment.v2";
-const MOTION_KEY = "popiadesk-stream-motion";
 
 const store = {
   get(key) {
@@ -79,233 +78,32 @@ const store = {
       /* Private mode and blocked storage are fine: the page works, it forgets. */
     }
   },
+  remove(key) {
+    try {
+      window.localStorage.removeItem(key);
+    } catch {
+      /* blocked storage holds nothing to remove */
+    }
+  },
 };
+
+/* "General" is the config's word for the one question no section of the Act
+   asks; every other question names its section. */
+const citation = (reference) =>
+  reference === "General"
+    ? "Good practice rather than a section of POPIA."
+    : `POPIA ${reference}.`;
+
+const sectionLabel = (question) =>
+  assessmentSections.find((s) => s.id === question.section)?.label ?? "";
 
 // --- The reader's motion preference --------------------------------------
 
-/* The operating system decides by default, which the prototype this design
-   came from never did. The toggle overrides it in both directions, because
-   someone who turns this page's motion on despite their OS setting has said
-   something specific about this page. */
-const systemReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const storedChoice = store.get(MOTION_KEY);
-let motionOn =
-  storedChoice === "on" ? true : storedChoice === "off" ? false : !systemReduced;
-let choiceMade = storedChoice !== null;
-
-const motionListeners = new Set();
-
-function applyMotion() {
-  root.dataset.motion = motionOn ? "on" : "off";
-  for (const fn of motionListeners) fn(motionOn);
-  const toggle = document.querySelector("[data-motion-toggle]");
-  if (toggle) {
-    toggle.setAttribute("aria-pressed", String(motionOn));
-    toggle.lastChild.textContent = ` Motion ${motionOn ? "on" : "off"}`;
-  }
-  const offer = document.querySelector("[data-motion-offer]");
-  if (offer) offer.hidden = !(systemReduced && !motionOn && !choiceMade);
-}
-
-function setMotion(next) {
-  motionOn = next;
-  choiceMade = true;
-  store.set(MOTION_KEY, next ? "on" : "off");
-  applyMotion();
-}
-
-document
-  .querySelector("[data-motion-toggle]")
-  ?.addEventListener("click", () => setMotion(!motionOn));
-document
-  .querySelector("[data-motion-show]")
-  ?.addEventListener("click", () => setMotion(true));
-
-// --- The stream ----------------------------------------------------------
-
-/* The surface's one always-on element, and the page's single orchestrated
-   moment: the field gathers into the mark, holds it long enough to be read,
-   and releases into the stream. It is decoration, it is aria-hidden, and it
-   says nothing that is not also said in text.
-
-   It sits behind the page. Painting it in front is what once made the mark
-   read as noise over the headline. */
-function startField(canvas) {
-  const context = canvas.getContext("2d", { alpha: true });
-  if (!context) return;
-
-  let particles = [];
-  let segments = new Float32Array(0);
-  let markPoints = [];
-  let width = 0;
-  let height = 0;
-  let pointer = POINTER_AWAY;
-  let frame = null;
-  let startedAt = null;
-  let scroll = { position: window.scrollY, velocity: 0 };
-  let time = 0;
-
-  function measure() {
-    // clientWidth, not innerWidth: the latter includes a classic scrollbar and
-    // the fixed box the canvas fills does not.
-    width = document.documentElement.clientWidth;
-    height = document.documentElement.clientHeight;
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
-    canvas.width = Math.floor(width * dpr);
-    canvas.height = Math.floor(height * dpr);
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
-    context.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    // A fresh seeded generator every build, so the field is the same picture on
-    // every load and in every screenshot taken for a visual audit.
-    const random = createRandom(11);
-    const count = particleCount(width, {
-      deviceMemory: navigator.deviceMemory,
-      cores: navigator.hardwareConcurrency,
-    });
-    particles = seedParticles(count, width, height, random);
-    segments = new Float32Array(count * 4);
-  }
-
-  function sampleMark() {
-    const off = document.createElement("canvas");
-    off.width = 330;
-    off.height = 180;
-    const offContext = off.getContext("2d", { willReadFrequently: true });
-    if (!offContext) return;
-    markPoints = sampleMarkPoints(
-      offContext,
-      createRandom(29),
-      MARK_PATHS,
-      MARK_VIEWBOX,
-      330,
-      180,
-    );
-  }
-
-  function paint(weights) {
-    context.clearRect(0, 0, width, height);
-    context.strokeStyle = fieldStroke(weights);
-    // A held shape needs a heavier line than a flow does, or the mark reads as
-    // a haze; the stream keeps the fine line it has always had.
-    context.lineWidth = 1.1 + weights.shield * 0.8;
-    context.beginPath();
-    for (let i = 0; i < segments.length; i += 4) {
-      context.moveTo(segments[i], segments[i + 1]);
-      context.lineTo(segments[i + 2], segments[i + 3]);
-    }
-    context.stroke();
-  }
-
-  function advance(weights) {
-    stepField({
-      particles,
-      weights,
-      shieldPoints: markPoints,
-      viewportWidth: width,
-      viewportHeight: height,
-      time,
-      pointer,
-      convergeY: null,
-      out: segments,
-    });
-  }
-
-  /* The reduced-motion page is drawn, not switched off. Returning nothing left
-     an empty half where the mark belongs, which is the half-built state the
-     standard forbids. The same solver runs to convergence off-screen instead
-     of over time. */
-  function paintStill() {
-    measure();
-    const held = { shield: 1, stream: 0, chaos: 0, calm: 0, converge: 0 };
-    for (let i = 0; i < 60; i++) {
-      time = i * 0.016;
-      advance(held);
-    }
-    // Positioned by the held weight, coloured by the resting one: a converged
-    // constellation overlaps itself far more than a dispersed field does, and
-    // at the shield's own alpha it lifts the ground under the headline.
-    context.clearRect(0, 0, width, height);
-    context.strokeStyle = fieldStroke(RESTING_WEIGHTS);
-    context.lineWidth = 1.5;
-    context.beginPath();
-    for (let i = 0; i < segments.length; i += 4) {
-      context.moveTo(segments[i], segments[i + 1]);
-      context.lineTo(segments[i + 2], segments[i + 3]);
-    }
-    context.stroke();
-  }
-
-  function loop() {
-    scroll = smoothScroll(scroll, window.scrollY);
-    // The field runs faster while the reader moves, so the page feels like it
-    // answers them rather than playing to itself.
-    time += 0.008 + Math.min(0.02, Math.abs(scroll.velocity) * 0.0004);
-    if (startedAt === null) startedAt = performance.now();
-    const elapsed = (performance.now() - startedAt) / 1000;
-    const weights = arrivalWeights(elapsed) ?? RESTING_WEIGHTS;
-    advance(weights);
-    paint(weights);
-    frame = window.requestAnimationFrame(loop);
-  }
-
-  function stop() {
-    if (frame !== null) window.cancelAnimationFrame(frame);
-    frame = null;
-  }
-
-  function start() {
-    if (frame !== null) return;
-    startedAt = null;
-    frame = window.requestAnimationFrame(loop);
-  }
-
-  sampleMark();
-
-  const onResize = () => {
-    if (motionOn) {
-      measure();
-    } else {
-      paintStill();
-    }
-  };
-  window.addEventListener("resize", onResize);
-  window.addEventListener(
-    "pointermove",
-    (event) => {
-      pointer = { x: event.clientX, y: event.clientY };
-    },
-    { passive: true },
-  );
-  for (const event of ["pointerleave", "pointercancel"]) {
-    window.addEventListener(event, () => {
-      pointer = POINTER_AWAY;
-    });
-  }
-  // A background tab costs nothing.
-  document.addEventListener("visibilitychange", () => {
-    if (!motionOn) return;
-    if (document.hidden) stop();
-    else start();
-  });
-
-  const respond = (on) => {
-    stop();
-    if (on) {
-      measure();
-      start();
-    } else {
-      paintStill();
-    }
-  };
-
-  motionListeners.add(respond);
-  // Run it once for the state the page is already in. The preference is applied
-  // before this module reaches the canvas, so waiting for the next change would
-  // leave the field unpainted for the whole visit: measured, zero lit pixels.
-  respond(motionOn);
-}
+/* The operating system decides. The stream surface's toggle went with its
+   particle field, which the light site does not have (PJ, 2026-10-16), so
+   what is left to move is the page's own: entrances, and the score ticking. */
+const motionOn = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+root.dataset.motion = motionOn ? "on" : "off";
 
 // --- Entrances -----------------------------------------------------------
 
@@ -316,7 +114,10 @@ function startField(canvas) {
 function startReveals() {
   const items = Array.from(document.querySelectorAll("[data-reveal]"));
   if (!items.length) return;
-
+  if (!motionOn) {
+    for (const item of items) item.dataset.reveal = "in";
+    return;
+  }
   const observer = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
@@ -327,27 +128,15 @@ function startReveals() {
     },
     { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
   );
-
-  const arm = (on) => {
-    for (const item of items) {
-      if (!on) {
-        item.dataset.reveal = "in";
-        continue;
-      }
-      // The hero's own entrance is a keyframe on data-enter, not this.
-      if (item.dataset.enter === "load") continue;
-      const box = item.getBoundingClientRect();
-      if (box.top < window.innerHeight && box.bottom > 0) {
-        item.dataset.reveal = "in";
-        continue;
-      }
-      item.dataset.reveal = "out";
-      observer.observe(item);
+  for (const item of items) {
+    const box = item.getBoundingClientRect();
+    if (box.top < window.innerHeight && box.bottom > 0) {
+      item.dataset.reveal = "in";
+      continue;
     }
-  };
-
-  arm(motionOn);
-  motionListeners.add(arm);
+    item.dataset.reveal = "out";
+    observer.observe(item);
+  }
 }
 
 // --- The counted score ---------------------------------------------------
@@ -368,6 +157,13 @@ function countTo(element, from, to, onFrame) {
 
 // --- The assessment ------------------------------------------------------
 
+const el = (tag, className, text) => {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+};
+
 function startAssessment(card) {
   const full = card.hasAttribute("data-full-assessment");
   const ids = full ? assessmentQuestions.map((q) => q.id) : HERO_QUESTION_IDS;
@@ -377,18 +173,22 @@ function startAssessment(card) {
   const remainingEl = scoreBlock.querySelector("[data-score-remaining]");
   const announceEl = scoreBlock.querySelector("[data-score-announce]");
   const ceilingEl = scoreBlock.querySelector("[data-ceiling]");
-  const marksEl = scoreBlock.querySelector("[data-marks]");
+  const carriedEl = scoreBlock.querySelector("[data-carried]");
+  const marksEl = document.querySelector("[data-marks]");
 
   let answers = {};
+  let carried = 0;
+  let justAnswered = null;
   let shown = 0;
 
   // Answers given on the front page travel here through the product's own
   // handoff, so "Continue the assessment" continues rather than restarting.
   if (full) {
     try {
-      const carried = parseHeroAnswers(sessionStorage.getItem(HANDOFF_KEY));
+      const fromHome = parseHeroAnswers(sessionStorage.getItem(HANDOFF_KEY));
       sessionStorage.removeItem(HANDOFF_KEY);
-      Object.assign(answers, carried);
+      Object.assign(answers, fromHome);
+      carried = Object.keys(fromHome).length;
     } catch {
       /* no handoff available */
     }
@@ -403,7 +203,10 @@ function startAssessment(card) {
   function persist() {
     if (full) {
       const payload = serialiseHeroAnswers(answers);
+      // Nothing answered (after "Start over") removes the saved copy: the
+      // privacy notice tells the reader that "Start over" clears it.
       if (payload) store.set(SAVED_KEY, payload);
+      else store.remove(SAVED_KEY);
     } else {
       try {
         const payload = serialiseHeroAnswers(sanitiseHeroAnswers(answers));
@@ -415,45 +218,76 @@ function startAssessment(card) {
     }
   }
 
+  function row(id) {
+    const question = questionById(id);
+    const value = answers[id];
+    const item = el("li");
+    const left = el("span");
+    left.append(el("span", "subject", subjectLabel(id)));
+    const mark = el("span", "earned");
+    if (value === undefined) {
+      item.classList.add("unanswered");
+      if (!full && LEDGER_GLOSS[id]) left.append(el("span", "answer", LEDGER_GLOSS[id]));
+      mark.dataset.open = "true";
+      mark.textContent = `up to ${trimMark(maxOf(question))}`;
+    } else {
+      if (id === justAnswered) item.classList.add("ink");
+      left.append(el("span", "answer", answerLabel(question, value)));
+      const earned = earnedOf(question, value);
+      if (earned === 0) mark.dataset.zero = "true";
+      mark.textContent = `${trimMark(earned)} / ${trimMark(maxOf(question))}`;
+    }
+    item.append(left, mark);
+    return item;
+  }
+
   function renderScore() {
     const score = calculateAssessmentScore(answers);
     const answered = Object.keys(answers).length;
     const previous = Number(numberEl.textContent) || 0;
+    if (motionOn && score !== previous) {
+      numberEl.classList.remove("tick");
+      void numberEl.offsetWidth;
+      numberEl.classList.add("tick");
+    }
     countTo(numberEl, previous, score, (value) => {
       numberEl.textContent = String(value);
     });
-    remainingEl.textContent = `${TOTAL - answered} question${TOTAL - answered === 1 ? "" : "s"} to go`;
+    const left = TOTAL - answered;
+    remainingEl.textContent = full
+      ? left === 0
+        ? "all answered"
+        : `${left} to answer`
+      : `${left} question${left === 1 ? "" : "s"} to go`;
     announceEl.textContent = `Your POPIA readiness score is ${score} out of 100, from ${answered} of ${TOTAL} questions.`;
 
     const ceiling = ceilingOf(answers);
-    if (answered > 0 && ceiling < 99.95) {
+    if (answered > 0 && answered < TOTAL && Math.round(ceiling) < 100) {
       ceilingEl.hidden = false;
-      ceilingEl.textContent = `Best possible total now ${trimMark(ceiling)} of 100.`;
+      ceilingEl.textContent = `Best possible total now ${Math.round(ceiling)} of 100.`;
     } else {
       ceilingEl.hidden = true;
     }
+    if (carriedEl) {
+      carriedEl.hidden = carried === 0;
+      carriedEl.textContent = `${carried} answer${carried === 1 ? "" : "s"} came with you from the front page, already marked.`;
+    }
 
+    // On /assess the open question is the row the reader has reached, so the
+    // card moves into the list; once all are answered it closes the column,
+    // after the marking note.
+    const current = full ? ids[nextUnanswered()] : undefined;
     marksEl.replaceChildren();
     for (const id of ids) {
-      if (answers[id] === undefined) continue;
-      const question = questionById(id);
-      const earned = earnedOf(question, answers[id]);
-      const item = document.createElement("li");
-      const left = document.createElement("span");
-      const subject = document.createElement("span");
-      subject.className = "subject";
-      subject.textContent = subjectLabel(id);
-      const answer = document.createElement("span");
-      answer.className = "answer";
-      answer.textContent = answerLabel(question, answers[id]);
-      left.append(subject, answer);
-      const mark = document.createElement("span");
-      mark.className = "earned";
-      if (earned === 0) mark.dataset.zero = "true";
-      mark.textContent = `${trimMark(earned)} / ${trimMark(maxOf(question))}`;
-      item.append(left, mark);
-      marksEl.append(item);
+      if (id === current) {
+        const item = el("li", "current");
+        item.append(card);
+        marksEl.append(item);
+      } else {
+        marksEl.append(row(id));
+      }
     }
+    if (full && current === undefined) marksEl.parentElement.append(card);
   }
 
   function renderQuestion(moveFocus) {
@@ -463,39 +297,39 @@ function startAssessment(card) {
       return;
     }
     const question = questionById(ids[index]);
-    const step = full
-      ? assessmentQuestions.findIndex((q) => q.id === question.id) + 1
-      : index + 1;
+    // Numbered by the reader's progress, as the app is: answers carried from
+    // the front page must not leave "Question 3 of 25" beside three marked.
+    const step = Object.keys(answers).length + 1;
 
-    const fieldset = document.createElement("fieldset");
+    const fieldset = el("fieldset");
     fieldset.dataset.question = question.id;
+    const legend = el("legend", "contents");
+    legend.append(el("span", "question-step", `Question ${step} of ${TOTAL}`));
+    // The area is named, not numbered: "area 1 of 8" left the reader to guess
+    // what an area was.
+    if (full)
+      legend.append(el("span", "question-ref", `Area: ${sectionLabel(question)}`));
+    legend.append(el("span", "question-text", question.text));
+    fieldset.append(legend);
 
-    const legend = document.createElement("legend");
-    legend.className = "contents";
-    const stepEl = document.createElement("span");
-    stepEl.className = "question-step";
-    stepEl.textContent = `Question ${step} of ${TOTAL}`;
-    const textEl = document.createElement("span");
-    textEl.className = "question-text";
-    textEl.textContent = question.text;
-    legend.append(stepEl, textEl);
+    // The front page cites the Act above the answers, as the app's hero does;
+    // /assess cites it below them with the marks, where whoever wants to check
+    // the working will look, and keeps the words before the answers short.
+    if (!full)
+      fieldset.append(el("p", "question-ref", `POPIA ${question.popiaReference}`));
+    if (full || HERO_HELP.has(question.id)) {
+      fieldset.append(el("p", "question-help", question.helpText));
+    }
 
-    const showHelp = full || HERO_HELP.has(question.id);
-    const help = document.createElement("p");
-    help.className = "question-help";
-    help.textContent = question.helpText;
-
-    const options = document.createElement("ul");
-    options.className = "options";
+    const options = el("ul", "options");
     let firstButton = null;
     for (const option of question.options) {
-      const li = document.createElement("li");
-      const button = document.createElement("button");
+      const li = el("li");
+      const button = el("button", "option", option.label);
       button.type = "button";
-      button.className = "option";
-      button.textContent = option.label;
       button.addEventListener("click", () => {
         answers[question.id] = option.value;
+        justAnswered = question.id;
         shown += 1;
         persist();
         renderScore();
@@ -505,33 +339,41 @@ function startAssessment(card) {
       li.append(button);
       options.append(li);
     }
-
-    fieldset.append(legend);
-    if (showHelp) fieldset.append(help);
     fieldset.append(options);
+
+    if (full) {
+      const ref = el(
+        "p",
+        "question-help",
+        `${question.detail ?? citation(question.popiaReference)} `,
+      );
+      ref.append(el("strong", "", `Worth ${trimMark(maxOf(question))} marks.`));
+      fieldset.append(ref);
+    }
 
     // Going back is one tap, because answering is one tap with no confirm step
     // and the cost of that is a mis-tap. The answer is dropped rather than
     // kept: the marks have to leave with it or the number and the answers stop
     // agreeing.
-    if (Object.keys(answers).length > 0) {
-      const back = document.createElement("button");
+    const previousId = ids
+      .slice(0, index)
+      .reverse()
+      .find((id) => answers[id] !== undefined);
+    if (previousId) {
+      const back = el(
+        "button",
+        "step-back",
+        `Change the answer to ${subjectLabel(previousId).toLowerCase()}`,
+      );
       back.type = "button";
-      back.className = "step-back";
-      const previousId = ids
-        .slice(0, index)
-        .reverse()
-        .find((id) => answers[id] !== undefined);
-      if (previousId) {
-        back.textContent = `Change the answer to ${subjectLabel(previousId).toLowerCase()}`;
-        back.addEventListener("click", () => {
-          delete answers[previousId];
-          persist();
-          renderScore();
-          renderQuestion(true);
-        });
-        fieldset.append(back);
-      }
+      back.addEventListener("click", () => {
+        delete answers[previousId];
+        justAnswered = null;
+        persist();
+        renderScore();
+        renderQuestion(true);
+      });
+      fieldset.append(back);
     }
 
     card.replaceChildren(fieldset);
@@ -543,93 +385,95 @@ function startAssessment(card) {
 
   function renderFinished() {
     const score = calculateAssessmentScore(answers);
-    const wrap = document.createElement("div");
-    wrap.className = "after-questions";
+    const wrap = el("div", "after-questions");
+    let lead;
 
-    const line = document.createElement("p");
     if (full) {
-      line.textContent = `That is all ${TOTAL}. Your score is ${score} out of 100, and it is yours: nothing was sent anywhere.`;
+      lead = el("h2", "", "That is all twenty-five.");
+      wrap.append(lead);
+      const zeros = zeroDutiesSentence(answers);
+      if (zeros) {
+        const p = el("p", "score-ceiling", zeros);
+        wrap.append(p);
+      }
+      wrap.append(el("p", "", riskSentenceFor(getRiskLevel(score), answers)));
+      wrap.append(
+        el(
+          "p",
+          "",
+          `Your score is ${score} out of 100, and it is yours: nothing was sent anywhere.`,
+        ),
+      );
     } else {
-      line.textContent = `Three answered, ${TOTAL - Object.keys(answers).length} to go. Your answers carry over.`;
+      lead = el(
+        "p",
+        "",
+        `Three answered, ${TOTAL - Object.keys(answers).length} to go. Your answers carry over.`,
+      );
+      wrap.append(lead);
     }
 
-    const actions = document.createElement("div");
-    actions.className = "actions";
-
+    const actions = el("div", "actions");
     if (!full) {
-      const go = document.createElement("a");
-      go.className = "btn btn-primary";
+      const go = el("a", "btn btn-primary", "Continue the assessment");
       go.href = "/assess";
-      go.textContent = "Continue the assessment";
       actions.append(go);
     }
-
-    const notify = document.createElement("a");
-    notify.className = full ? "btn btn-primary" : "btn btn-secondary";
+    const notify = el(
+      "a",
+      full ? "btn btn-primary" : "btn btn-secondary",
+      "Email us to hear when it opens",
+    );
     notify.href =
       "mailto:hello@popiadesk.co.za?subject=Tell%20me%20when%20POPIAdesk%20opens";
-    notify.textContent = "Get a note when it opens";
     actions.append(notify);
+    wrap.append(actions);
 
-    const restart = document.createElement("button");
+    const restart = el("button", "step-back", "Start over");
     restart.type = "button";
-    restart.className = "step-back";
-    restart.textContent = "Start over";
     restart.addEventListener("click", () => {
       answers = {};
+      carried = 0;
+      justAnswered = null;
       persist();
       renderScore();
       renderQuestion(true);
     });
+    wrap.append(restart);
 
-    wrap.append(line, actions, restart);
+    if (full) {
+      const recommendations = generateRecommendations(answers).slice(0, 5);
+      if (recommendations.length > 0) {
+        wrap.append(el("h2", "", "What to do first."));
+        const list = el("ol", "marks");
+        // Each step is named by its subject, because the advice is written to
+        // sit under its own question ("Work through what your check found").
+        for (const rec of recommendations) {
+          const item = el("li");
+          const step = el("span");
+          step.append(el("span", "subject", subjectLabel(rec.questionId)));
+          step.append(el("span", "answer", rec.text));
+          item.append(step);
+          list.append(item);
+        }
+        wrap.append(list);
+      }
+    }
+
     card.replaceChildren(wrap);
-    if (shown > 0)
-      (line.setAttribute("tabindex", "-1"), line.focus({ preventScroll: true }));
+    if (shown > 0) {
+      lead.setAttribute("tabindex", "-1");
+      lead.focus({ preventScroll: true });
+    }
   }
 
   renderScore();
   renderQuestion(false);
 }
 
-// --- The conditions tally ------------------------------------------------
-
-function startConditions(list) {
-  const tally = document.querySelector("[data-tally]");
-  if (!tally) return;
-  const opened = new Set();
-  const items = list.querySelectorAll("details");
-
-  const update = () => {
-    if (opened.size >= items.length) {
-      tally.innerHTML =
-        "<strong>All eight.</strong> That is more than most businesses subject to the Act can name.";
-      return;
-    }
-    tally.textContent = `Opened ${opened.size} of ${items.length}.`;
-  };
-
-  items.forEach((details, index) => {
-    details.addEventListener("toggle", () => {
-      if (details.open) opened.add(index);
-      update();
-    });
-  });
-
-  update();
-}
-
 // --- Start ---------------------------------------------------------------
-
-applyMotion();
-
-const canvas = document.getElementById("field");
-if (canvas) startField(canvas);
 
 startReveals();
 
 const card = document.querySelector("[data-question-card]");
 if (card) startAssessment(card);
-
-const conditions = document.querySelector("[data-conditions]");
-if (conditions) startConditions(conditions);
